@@ -1,0 +1,53 @@
+<!-- src/app/modules/patient/patient-list/patient-list.component.html -->
+<div class="card">
+  <h2>Patients</h2>
+  
+  <div class="grid mb-4">
+    <div class="col-12 md:col-6 lg:col-4">
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText class="w-full" placeholder="Search patients" [(ngModel)]="searchText">
+      </span>
+    </div>
+    
+    <div class="col-12 md:col-6 lg:col-8 flex justify-content-end">
+      <button pButton pRipple label="Add New Patient" icon="pi pi-plus" class="p-button-success" routerLink="/patient/new"></button>
+    </div>
+  </div>
+  
+  <p-table [value]="filterPatients()" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" [loading]="loading" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Contact</th>
+        <th>Blood Group</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-patient>
+      <tr>
+        <td>{{ patient.FirstName }} {{ patient.LastName }}</td>
+        <td>{{ patient.Gender }}</td>
+        <td>{{ getAge(patient.DateOfBirth) }}</td>
+        <td>
+          <div>{{ patient.Email }}</div>
+          <div>{{ patient.PhoneNumber }}</div>
+        </td>
+        <td>{{ patient.BloodGroup || 'Not specified' }}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text" (click)="viewPatient(patient.PatientID)"></button>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-success" [routerLink]="['/patient', patient.PatientID, 'edit']"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center p-4">
+          No patients found.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,0 +1,77 @@
+<!-- src/app/modules/pharmacy/inventory-add/inventory-add.component.html -->
+<p-toast></p-toast>
+
+<div class="card">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>Add Inventory</h2>
+    <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button-outlined" (click)="cancel()"></button>
+  </div>
+  
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <p-card header="Medicine Information">
+        <div class="field mb-4">
+          <label for="medicine" class="block text-900 font-medium mb-2">Medicine*</label>
+          <p-dropdown id="medicine" [options]="medicines" [(ngModel)]="inventoryItem.medicineId" 
+                      placeholder="Select Medicine" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="batchNumber" class="block text-900 font-medium mb-2">Batch Number*</label>
+          <input id="batchNumber" type="text" pInputText class="w-full" [(ngModel)]="inventoryItem.batchNumber">
+        </div>
+        
+        <div class="field mb-4">
+          <label for="supplier" class="block text-900 font-medium mb-2">Supplier*</label>
+          <p-dropdown id="supplier" [options]="suppliers" [(ngModel)]="inventoryItem.supplierId" 
+                      placeholder="Select Supplier" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="storageLocation" class="block text-900 font-medium mb-2">Storage Location</label>
+          <input id="storageLocation" type="text" pInputText class="w-full" [(ngModel)]="inventoryItem.storageLocation"
+                 placeholder="e.g., Shelf A1">
+        </div>
+      </p-card>
+    </div>
+    
+    <div class="col-12 md:col-6">
+      <p-card header="Inventory Details">
+        <div class="field mb-4">
+          <label for="purchaseDate" class="block text-900 font-medium mb-2">Purchase Date*</label>
+          <p-calendar id="purchaseDate" [(ngModel)]="inventoryItem.purchaseDate" [showIcon]="true" 
+                      dateFormat="yy-mm-dd" [maxDate]="maxDate" styleClass="w-full"></p-calendar>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="expiryDate" class="block text-900 font-medium mb-2">Expiry Date*</label>
+          <p-calendar id="expiryDate" [(ngModel)]="inventoryItem.expiryDate" [showIcon]="true" 
+                      dateFormat="yy-mm-dd" [minDate]="minDate" styleClass="w-full"></p-calendar>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="quantity" class="block text-900 font-medium mb-2">Quantity Received*</label>
+          <p-inputNumber id="quantity" [(ngModel)]="inventoryItem.quantityReceived" [showButtons]="true" 
+                        [min]="1" styleClass="w-full"></p-inputNumber>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="unitCost" class="block text-900 font-medium mb-2">Unit Cost*</label>
+          <p-inputNumber id="unitCost" [(ngModel)]="inventoryItem.unitCost" mode="currency" currency="USD" 
+                        [min]="0.01" [minFractionDigits]="2" styleClass="w-full"></p-inputNumber>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="sellingPrice" class="block text-900 font-medium mb-2">Selling Price*</label>
+          <p-inputNumber id="sellingPrice" [(ngModel)]="inventoryItem.sellingPrice" mode="currency" currency="USD" 
+                        [min]="0.01" [minFractionDigits]="2" styleClass="w-full"></p-inputNumber>
+        </div>
+      </p-card>
+    </div>
+  </div>
+  
+  <div class="flex justify-content-end gap-2 mt-4">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" (click)="cancel()"></button>
+    <button pButton pRipple label="Add Inventory" icon="pi pi-check" [loading]="loading" (click)="submitForm()"></button>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<!-- src/app/modules/appointment/appointment-form/appointment-form.component.html -->
+<p-toast></p-toast>
+
+<div class="card">
+  <h2>Schedule New Appointment</h2>
+  
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <div class="p-field mb-4">
+        <label for="patient" class="block text-900 font-medium mb-2">Patient</label>
+        <p-dropdown id="patient" [options]="patients" [(ngModel)]="appointment.patientId" placeholder="Select Patient" [showClear]="true" styleClass="w-full"></p-dropdown>
+      </div>
+      
+      <div class="p-field mb-4">
+        <label for="doctor" class="block text-900 font-medium mb-2">Doctor</label>
+        <p-dropdown id="doctor" [options]="doctors" [(ngModel)]="appointment.doctorId" placeholder="Select Doctor" [showClear]="true" styleClass="w-full"></p-dropdown>
+      </div>
+      
+      <div class="p-field mb-4">
+        <label for="type" class="block text-900 font-medium mb-2">Appointment Type</label>
+        <p-dropdown id="type" [options]="appointmentTypes" [(ngModel)]="appointment.appointmentType" placeholder="Select Type" [showClear]="true" styleClass="w-full"></p-dropdown>
+      </div>
+    </div>
+    
+    <div class="col-12 md:col-6">
+      <div class="p-field mb-4">
+        <label for="date" class="block text-900 font-medium mb-2">Date</label>
+        <p-calendar id="date" [(ngModel)]="appointment.appointmentDate" [showIcon]="true" [showButtonBar]="true" styleClass="w-full" [minDate]="today"></p-calendar>
+      </div>
+      
+      <div class="p-field mb-4">
+        <label for="startTime" class="block text-900 font-medium mb-2">Time Slot</label>
+        <p-dropdown id="startTime" [options]="timeSlots" [(ngModel)]="appointment.startTime" placeholder="Select Time" [showClear]="true" styleClass="w-full"></p-dropdown>
+      </div>
+      
+      <div class="p-field mb-4">
+        <label for="notes" class="block text-900 font-medium mb-2">Notes</label>
+        <textarea id="notes" pTextarea [(ngModel)]="appointment.notes" rows="4" class="w-full" placeholder="Additional notes for the appointment"></textarea>
+      </div>
+    </div>
+  </div>
+  
+  <div class="flex justify-content-end gap-2 mt-4">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" (click)="cancel()"></button>
+    <button pButton pRipple label="Schedule Appointment" icon="pi pi-check" (click)="submitForm()"></button>
+  </div>
+</div>

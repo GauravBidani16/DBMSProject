@@ -1,0 +1,106 @@
+<!-- src/app/modules/vitals/vitals-add/vitals-add.component.html -->
+<p-toast></p-toast>
+
+<div class="card">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>Record Vital Signs</h2>
+    <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button-outlined" (click)="cancel()"></button>
+  </div>
+  
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <p-card header="Patient Information">
+        <div *ngIf="!vitalsData.patientId">
+          <div class="field mb-4">
+            <label for="patient" class="block text-900 font-medium mb-2">Patient*</label>
+            <p-dropdown id="patient" [options]="patients" [(ngModel)]="vitalsData.patientId" 
+                        placeholder="Select Patient" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+          </div>
+        </div>
+        
+        <div *ngIf="selectedPatient">
+          <div class="text-center mb-3">
+            <i class="pi pi-user text-6xl text-primary"></i>
+          </div>
+          <div class="text-xl font-medium text-center mb-2">{{ selectedPatient.FirstName }} {{ selectedPatient.LastName }}</div>
+          <div class="text-500 text-center mb-3">Patient ID: {{ selectedPatient.PatientID }}</div>
+          
+          <div class="field mb-2">
+            <label class="font-medium">Date of Birth:</label>
+            <div>{{ selectedPatient.DateOfBirth | date:'mediumDate' }}</div>
+          </div>
+          
+          <div class="field mb-2">
+            <label class="font-medium">Gender:</label>
+            <div>{{ selectedPatient.Gender }}</div>
+          </div>
+          
+          <div class="field mb-2">
+            <label class="font-medium">Blood Group:</label>
+            <div>{{ selectedPatient.BloodGroup || 'Not specified' }}</div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+    
+    <div class="col-12 md:col-8">
+      <p-card header="Vital Signs">
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <div class="field mb-4">
+              <label for="heartRate" class="block text-900 font-medium mb-2">Heart Rate (bpm)</label>
+              <p-inputNumber id="heartRate" [(ngModel)]="vitalsData.heartRate" [showButtons]="true" 
+                          [min]="30" [max]="220" styleClass="w-full"></p-inputNumber>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <div class="field mb-4">
+              <label class="block text-900 font-medium mb-2">Blood Pressure (mmHg)</label>
+              <div class="flex gap-2">
+                <div class="flex-1">
+                  <label for="systolic" class="block text-600 mb-1">Systolic</label>
+                  <p-inputNumber id="systolic" [(ngModel)]="vitalsData.bloodPressure.systolic" [showButtons]="true" 
+                              [min]="60" [max]="250" styleClass="w-full"></p-inputNumber>
+                </div>
+                <div class="flex-1">
+                  <label for="diastolic" class="block text-600 mb-1">Diastolic</label>
+                  <p-inputNumber id="diastolic" [(ngModel)]="vitalsData.bloodPressure.diastolic" [showButtons]="true" 
+                              [min]="30" [max]="150" styleClass="w-full"></p-inputNumber>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-12 md:col-6">
+            <div class="field mb-4">
+              <label for="temperature" class="block text-900 font-medium mb-2">Temperature (°C)</label>
+              <p-inputNumber id="temperature" [(ngModel)]="vitalsData.temperature" [showButtons]="true" 
+                          [min]="32" [max]="45" [minFractionDigits]="1" [maxFractionDigits]="1" styleClass="w-full"></p-inputNumber>
+            </div>
+          </div>
+          
+          <div class="col-12 md:col-6">
+            <div class="field mb-4">
+              <label for="spo2" class="block text-900 font-medium mb-2">Oxygen Saturation (%)</label>
+              <p-inputNumber id="spo2" [(ngModel)]="vitalsData.oxygenSaturation" [showButtons]="true" 
+                          [min]="50" [max]="100" styleClass="w-full"></p-inputNumber>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <div class="field mb-4">
+              <label for="notes" class="block text-900 font-medium mb-2">Notes</label>
+              <textarea id="notes" pTextarea [(ngModel)]="vitalsData.notes" rows="3" class="w-full"></textarea>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+  
+  <div class="flex justify-content-end gap-2 mt-4">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" (click)="cancel()"></button>
+    <button pButton pRipple label="Save Vitals" icon="pi pi-check" [loading]="loading" (click)="submitForm()"></button>
+  </div>
+</div>

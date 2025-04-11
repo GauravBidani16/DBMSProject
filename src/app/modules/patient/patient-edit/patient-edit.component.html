@@ -1,0 +1,114 @@
+<!-- src/app/modules/patient/patient-edit/patient-edit.component.html -->
+<div class="card">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>{{ isNewPatient ? 'Add New Patient' : 'Edit Patient' }}</h2>
+    <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button-outlined" (click)="cancel()"></button>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-content-center">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  </div>
+
+  <div *ngIf="!loading">
+    <div class="grid">
+      <!-- Personal Information -->
+      <div class="col-12 md:col-6">
+        <p-card header="Personal Information">
+          <div class="field mb-4">
+            <label for="firstName" class="block text-900 font-medium mb-2">First Name *</label>
+            <input id="firstName" type="text" pInputText class="w-full" [(ngModel)]="patient.firstName" required>
+          </div>
+          
+          <div class="field mb-4">
+            <label for="lastName" class="block text-900 font-medium mb-2">Last Name *</label>
+            <input id="lastName" type="text" pInputText class="w-full" [(ngModel)]="patient.lastName" required>
+          </div>
+          
+          <div class="field mb-4">
+            <label for="dateOfBirth" class="block text-900 font-medium mb-2">Date of Birth *</label>
+            <p-calendar id="dateOfBirth" [(ngModel)]="patient.dateOfBirth" [showIcon]="true" dateFormat="yy-mm-dd" [maxDate]="defaultDOB" [showButtonBar]="true" styleClass="w-full"></p-calendar>
+          </div>
+          
+          <div class="field mb-4">
+            <label for="gender" class="block text-900 font-medium mb-2">Gender *</label>
+            <p-dropdown id="gender" [options]="genderOptions" [(ngModel)]="patient.gender" placeholder="Select Gender" [showClear]="false" styleClass="w-full"></p-dropdown>
+          </div>
+          
+          <div class="field mb-4">
+            <label for="bloodGroup" class="block text-900 font-medium mb-2">Blood Group</label>
+            <p-dropdown id="bloodGroup" [options]="bloodGroupOptions" [(ngModel)]="patient.bloodGroup" placeholder="Select Blood Group" [showClear]="true" styleClass="w-full"></p-dropdown>
+          </div>
+        </p-card>
+      </div>
+      
+      <!-- Contact Information -->
+      <div class="col-12 md:col-6">
+        <p-card header="Contact Information">
+          <div class="field mb-4">
+            <label for="email" class="block text-900 font-medium mb-2">Email *</label>
+            <input id="email" type="email" pInputText class="w-full" [(ngModel)]="patient.email" required>
+          </div>
+          
+          <div class="field mb-4">
+            <label for="phoneNumber" class="block text-900 font-medium mb-2">Phone Number</label>
+            <input id="phoneNumber" type="tel" pInputText class="w-full" [(ngModel)]="patient.phoneNumber">
+          </div>
+          
+          <div class="field mb-4">
+            <label for="address" class="block text-900 font-medium mb-2">Address</label>
+            <textarea id="address" pTextarea [rows]="3" class="w-full" [(ngModel)]="patient.address"></textarea>
+          </div>
+        </p-card>
+      </div>
+      
+      <!-- Medical Information -->
+      <div class="col-12">
+        <p-card header="Medical Information">
+          <div class="field mb-4">
+            <label for="allergies" class="block text-900 font-medium mb-2">Allergies</label>
+            <textarea id="allergies" pTextarea [rows]="2" class="w-full" [(ngModel)]="patient.allergies" placeholder="List any known allergies"></textarea>
+          </div>
+          
+          <div class="field mb-4">
+            <label for="medicalHistory" class="block text-900 font-medium mb-2">Medical History</label>
+            <textarea id="medicalHistory" pTextarea [rows]="4" class="w-full" [(ngModel)]="patient.medicalHistory" placeholder="Any significant medical history, conditions, or previous surgeries"></textarea>
+          </div>
+        </p-card>
+      </div>
+      
+      <!-- Emergency Contact -->
+      <div class="col-12">
+        <p-card header="Emergency Contact">
+          <div class="grid">
+            <div class="col-12 md:col-4">
+              <div class="field mb-4">
+                <label for="emergencyName" class="block text-900 font-medium mb-2">Contact Name</label>
+                <input id="emergencyName" type="text" pInputText class="w-full" [(ngModel)]="patient.emergencyContactName">
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-4">
+              <div class="field mb-4">
+                <label for="emergencyNumber" class="block text-900 font-medium mb-2">Contact Number</label>
+                <input id="emergencyNumber" type="tel" pInputText class="w-full" [(ngModel)]="patient.emergencyContactNumber">
+              </div>
+            </div>
+            
+            <div class="col-12 md:col-4">
+              <div class="field mb-4">
+                <label for="emergencyRelation" class="block text-900 font-medium mb-2">Relationship</label>
+                <input id="emergencyRelation" type="text" pInputText class="w-full" [(ngModel)]="patient.emergencyContactRelation">
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex justify-content-end gap-2 mt-4">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" (click)="cancel()"></button>
+      <button pButton pRipple label="Save Patient" icon="pi pi-check" [loading]="loading" (click)="savePatient()"></button>
+    </div>
+  </div>
+</div>

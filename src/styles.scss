@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--surface-ground);
+    color: var(--text-color);
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}

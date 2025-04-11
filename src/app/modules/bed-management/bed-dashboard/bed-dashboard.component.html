@@ -1,0 +1,166 @@
+<!-- src/app/modules/bed-management/bed-dashboard/bed-dashboard.component.html -->
+<p-toast></p-toast>
+
+<div class="card">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>Bed Management</h2>
+    <button pButton pRipple label="Admit Patient" icon="pi pi-plus" class="p-button-success" (click)="openAdmitDialog()"></button>
+  </div>
+  
+  <div class="grid">
+    <!-- Bed occupancy summary -->
+    <div class="col-12 lg:col-4">
+      <p-card header="Bed Occupancy Summary">
+        <div class="flex justify-content-between align-items-center border-bottom-1 surface-border pb-3 mb-3">
+          <div class="font-medium">Total Beds</div>
+          <div class="font-bold text-xl">{{ totalBeds }}</div>
+        </div>
+        <div class="flex justify-content-between align-items-center border-bottom-1 surface-border pb-3 mb-3">
+          <div class="font-medium">Available Beds</div>
+          <div class="font-bold text-xl text-green-500">{{ availableBeds }}</div>
+        </div>
+        <div class="flex justify-content-between align-items-center">
+          <div class="font-medium">Occupied Beds</div>
+          <div class="font-bold text-xl text-red-500">{{ occupiedBeds }}</div>
+        </div>
+      </p-card>
+    </div>
+    
+    <!-- Current admissions -->
+    <div class="col-12 lg:col-8">
+      <p-card header="Current Admissions">
+        <p-table [value]="currentAdmissions" styleClass="p-datatable-sm" [paginator]="true" [rows]="5" [loading]="loading">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Room/Bed</th>
+              <th>Admission Date</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-admission>
+            <tr>
+              <td>{{ admission.PatientName }}</td>
+              <td>{{ admission.DoctorName }}</td>
+              <td>Room {{ admission.RoomNumber }} - Bed {{ admission.BedNumber }}</td>
+              <td>{{ admission.AdmissionDate | date:'medium' }}</td>
+              <td>
+                <button pButton pRipple icon="pi pi-user-minus" class="p-button-rounded p-button-danger p-button-text" 
+                        (click)="openDischargeDialog(admission)" pTooltip="Discharge Patient"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="text-center p-4">
+                No current admissions found.
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+    
+    <!-- Bed status table -->
+    <div class="col-12">
+      <p-card header="Bed Status">
+        <p-table [value]="beds" styleClass="p-datatable-sm" [paginator]="true" [rows]="10" [loading]="loading">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Room</th>
+              <th>Bed</th>
+              <th>Room Type</th>
+              <th>Status</th>
+              <th>Current Patient</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-bed>
+            <tr>
+              <td>{{ bed.RoomNumber }}</td>
+              <td>{{ bed.BedNumber }}</td>
+              <td>{{ bed.RoomTypeName }}</td>
+              <td>
+                <span [class]="getBedStatusColor(bed.Status)">
+                  {{ bed.Status }}
+                </span>
+              </td>
+              <td>
+                <span *ngIf="bed.PatientName">{{ bed.PatientName }}</span>
+                <span *ngIf="!bed.PatientName">-</span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+</div>
+
+<!-- Admit Patient Dialog -->
+<p-dialog [(visible)]="admitDialog" [style]="{width: '500px'}" header="Admit Patient" [modal]="true" styleClass="p-fluid">
+  <div class="field mb-4">
+    <label for="patient" class="font-medium mb-2 block">Patient*</label>
+    <p-dropdown id="patient" [options]="patients" [(ngModel)]="newAdmission.patientId" placeholder="Select Patient" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+  </div>
+  
+  <div class="field mb-4">
+    <label for="doctor" class="font-medium mb-2 block">Admitting Doctor*</label>
+    <p-dropdown id="doctor" [options]="doctors" [(ngModel)]="newAdmission.doctorId" placeholder="Select Doctor" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+  </div>
+  
+  <div class="field mb-4">
+    <label for="bed" class="font-medium mb-2 block">Bed*</label>
+    <p-dropdown id="bed" [options]="availableBedsOptions" [(ngModel)]="newAdmission.bedId" placeholder="Select Bed" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+  </div>
+  
+  <div class="field mb-4">
+    <label for="admissionReason" class="font-medium mb-2 block">Admission Reason*</label>
+    <input id="admissionReason" type="text" pInputText [(ngModel)]="newAdmission.admissionReason">
+  </div>
+  
+  <div class="field mb-4">
+    <label for="diagnosis" class="font-medium mb-2 block">Initial Diagnosis</label>
+    <input id="diagnosis" type="text" pInputText [(ngModel)]="newAdmission.diagnosisAtAdmission">
+  </div>
+  
+  <div class="field mb-4">
+    <label for="notes" class="font-medium mb-2 block">Notes</label>
+    <textarea id="notes" pTextarea [rows]="3" [(ngModel)]="newAdmission.notes"></textarea>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="admitDialog = false"></button>
+    <button pButton pRipple label="Admit" icon="pi pi-check" class="p-button-success" (click)="admitPatient()"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- Discharge Patient Dialog -->
+<p-dialog [(visible)]="dischargeDialog" [style]="{width: '450px'}" header="Discharge Patient" [modal]="true" styleClass="p-fluid">
+  <div *ngIf="selectedAdmission">
+    <div class="field mb-4">
+      <label class="font-medium mb-2 block">Patient</label>
+      <div>{{ selectedAdmission.PatientName }}</div>
+    </div>
+    
+    <div class="field mb-4">
+      <label class="font-medium mb-2 block">Room/Bed</label>
+      <div>Room {{ selectedAdmission.RoomNumber }} - Bed {{ selectedAdmission.BedNumber }}</div>
+    </div>
+    
+    <div class="field mb-4">
+      <label class="font-medium mb-2 block">Admission Date</label>
+      <div>{{ selectedAdmission.AdmissionDate | date:'medium' }}</div>
+    </div>
+    
+    <div class="field mb-4">
+      <label for="dischargeNotes" class="font-medium mb-2 block">Discharge Notes</label>
+      <textarea id="dischargeNotes" pTextarea [rows]="4" [(ngModel)]="dischargeNotes"></textarea>
+    </div>
+  </div>
+  
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="dischargeDialog = false"></button>
+    <button pButton pRipple label="Discharge" icon="pi pi-check" class="p-button-danger" (click)="dischargePatient()"></button>
+  </ng-template>
+</p-dialog>

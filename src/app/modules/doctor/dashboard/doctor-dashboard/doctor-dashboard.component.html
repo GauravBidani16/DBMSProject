@@ -1,0 +1,118 @@
+<!-- src/app/modules/doctor/dashboard/doctor-dashboard.component.html -->
+<div class="grid">
+  <div class="col-12">
+    <h1>Doctor Dashboard</h1>
+    <p>Welcome back, Dr. Smith</p>
+  </div>
+  
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card styleClass="h-full">
+      <div class="text-center">
+        <i class="pi pi-calendar-plus text-4xl text-primary mb-3"></i>
+        <div class="text-900 font-medium text-xl mb-2">Today's Appointments</div>
+        <div class="text-900 font-bold text-5xl">5</div>
+      </div>
+    </p-card>
+  </div>
+  
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card styleClass="h-full">
+      <div class="text-center">
+        <i class="pi pi-users text-4xl text-primary mb-3"></i>
+        <div class="text-900 font-medium text-xl mb-2">My Patients</div>
+        <div class="text-900 font-bold text-5xl">42</div>
+      </div>
+    </p-card>
+  </div>
+  
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card styleClass="h-full">
+      <div class="text-center">
+        <i class="pi pi-clipboard text-4xl text-primary mb-3"></i>
+        <div class="text-900 font-medium text-xl mb-2">Pending Reports</div>
+        <div class="text-900 font-bold text-5xl">7</div>
+      </div>
+    </p-card>
+  </div>
+  
+  <div class="col-12 md:col-6 lg:col-3">
+    <p-card styleClass="h-full">
+      <div class="text-center">
+        <i class="pi pi-bell text-4xl text-primary mb-3"></i>
+        <div class="text-900 font-medium text-xl mb-2">Notifications</div>
+        <div class="text-900 font-bold text-5xl">3</div>
+      </div>
+    </p-card>
+  </div>
+  
+  <div class="col-12 lg:col-8">
+    <p-card header="Today's Appointments" styleClass="h-full">
+      <p-table [value]="todayAppointments" [paginator]="true" [rows]="5" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Patient</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-appointment>
+          <tr>
+            <td>{{ appointment.patientName }}</td>
+            <td>{{ appointment.time }}</td>
+            <td>{{ appointment.type }}</td>
+            <td>
+              <p-tag [value]="appointment.status" severity="success"></p-tag>
+            </td>
+            <td>
+              <button pButton pRipple type="button" label="View" class="p-button-sm p-button-outlined"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+  
+  <div class="col-12 lg:col-4">
+    <p-card header="Recent Patients" styleClass="h-full">
+      <ul class="list-none p-0 m-0">
+        <li *ngFor="let patient of recentPatients" class="flex align-items-center py-2 border-bottom-1 surface-border">
+          <div class="flex-grow-1">
+            <div class="font-medium text-900">{{ patient.name }}</div>
+            <div class="text-500">{{ patient.age }} years • {{ patient.condition }}</div>
+          </div>
+          <button pButton pRipple type="button" icon="pi pi-file" class="p-button-text p-button-rounded" title="View Records"></button>
+        </li>
+      </ul>
+      <div class="flex justify-content-end mt-3">
+        <button pButton pRipple type="button" label="View All Patients" class="p-button-text"></button>
+      </div>
+    </p-card>
+  </div>
+  
+  <div class="col-12">
+    <p-card header="Patient Conditions Summary">
+      <p-table [value]="patientStatistics" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Condition</th>
+            <th style="width: 25%">Patient Count</th>
+            <th style="width: 40%">Distribution</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-stat>
+          <tr>
+            <td>{{ stat.condition }}</td>
+            <td>{{ stat.count }} ({{ stat.percentage }}%)</td>
+            <td>
+              <div class="w-full bg-gray-200 border-round" style="height: 20px;">
+                <div class="bg-primary border-round h-full" [style.width.%]="stat.percentage"></div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>
