@@ -23,6 +23,16 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  register(registrationData: any): Observable<any> {
+    return this.http.post<any>(`${API_URL}/auth/register`, registrationData)
+      .pipe(
+        catchError(error => {
+          console.error('Registration error:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${API_URL}/auth/login`, { email, password })
       .pipe(
@@ -40,6 +50,7 @@ export class AuthService {
         })
       );
   }
+  
 
   logout(): void {
     // Remove user from local storage to log user out

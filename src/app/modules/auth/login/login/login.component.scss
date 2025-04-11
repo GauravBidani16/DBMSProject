@@ -1,0 +1,10 @@
+// src/app/modules/auth/login/login.component.scss
+:host ::ng-deep {
+  .p-password {
+    width: 100%;
+    
+    input {
+      width: 100%;
+    }
+  }
+}
