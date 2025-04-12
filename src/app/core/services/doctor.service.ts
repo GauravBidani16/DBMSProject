@@ -20,10 +20,7 @@ export class DoctorService {
         map((response: any) => {
           if (response && response.success) {
             // Format doctors for dropdown
-            return response.data.map((doctor: any) => ({
-              label: `Dr. ${doctor.FirstName} ${doctor.LastName} - ${doctor.Specialization}`,
-              value: doctor.DoctorID
-            }));
+            return response.data;
           }
           return [];
         }),

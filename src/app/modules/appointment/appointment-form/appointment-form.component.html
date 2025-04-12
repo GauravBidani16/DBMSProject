@@ -8,17 +8,17 @@
     <div class="col-12 md:col-6">
       <div class="p-field mb-4">
         <label for="patient" class="block text-900 font-medium mb-2">Patient</label>
-        <p-dropdown id="patient" [options]="patients" [(ngModel)]="appointment.patientId" placeholder="Select Patient" [showClear]="true" styleClass="w-full"></p-dropdown>
+        <p-select id="patient" optionLabel="FirstName" [options]="patients" optionValue="PatientID" [(ngModel)]="appointment.patientId" placeholder="Select Patient" [showClear]="true" styleClass="w-full"></p-select>
       </div>
       
       <div class="p-field mb-4">
         <label for="doctor" class="block text-900 font-medium mb-2">Doctor</label>
-        <p-dropdown id="doctor" [options]="doctors" [(ngModel)]="appointment.doctorId" placeholder="Select Doctor" [showClear]="true" styleClass="w-full"></p-dropdown>
+        <p-select id="doctor" optionLabel="FirstName" [options]="doctors" optionValue="DoctorID" [(ngModel)]="appointment.doctorId" placeholder="Select Doctor" [showClear]="true" styleClass="w-full"></p-select>
       </div>
       
       <div class="p-field mb-4">
         <label for="type" class="block text-900 font-medium mb-2">Appointment Type</label>
-        <p-dropdown id="type" [options]="appointmentTypes" [(ngModel)]="appointment.appointmentType" placeholder="Select Type" [showClear]="true" styleClass="w-full"></p-dropdown>
+        <p-select id="type" [options]="appointmentTypes" [(ngModel)]="appointment.appointmentType" placeholder="Select Type" [showClear]="true" styleClass="w-full"></p-select>
       </div>
     </div>
     
@@ -30,7 +30,7 @@
       
       <div class="p-field mb-4">
         <label for="startTime" class="block text-900 font-medium mb-2">Time Slot</label>
-        <p-dropdown id="startTime" [options]="timeSlots" [(ngModel)]="appointment.startTime" placeholder="Select Time" [showClear]="true" styleClass="w-full"></p-dropdown>
+        <p-select id="startTime" [options]="timeSlots" [(ngModel)]="appointment.startTime" placeholder="Select Time" [showClear]="true" styleClass="w-full"></p-select>
       </div>
       
       <div class="p-field mb-4">

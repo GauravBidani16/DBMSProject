@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -15,6 +14,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { PatientService } from '../../../core/services/patient.service';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-appointment-form',
@@ -25,7 +25,7 @@ import { PatientService } from '../../../core/services/patient.service';
     CardModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     CalendarModule,
     TextareaModule,
     ToastModule
@@ -95,6 +95,8 @@ export class AppointmentFormComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.patients = data;
+          console.log(data);
+          
         },
         error: () => {
           this.messageService.add({
@@ -111,6 +113,8 @@ export class AppointmentFormComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.doctors = data;
+          console.log(data);
+          
         },
         error: (error) => {
           this.messageService.add({

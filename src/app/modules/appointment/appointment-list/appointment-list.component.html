@@ -8,16 +8,16 @@
     <div class="col-12 md:col-6 lg:col-4">
       <span class="p-input-icon-left w-full">
         <i class="pi pi-search"></i>
-        <input type="text" pInputText class="w-full" placeholder="Search by patient or doctor" [(ngModel)]="searchText">
+        <input type="text" pInputText class="w-full" placeholder="Search by patient or doctor" [(ngModel)]="searchText" (onKeyDown)="applyFilters()">
       </span>
     </div>
     
     <div class="col-12 md:col-6 lg:col-3">
-      <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="Select Status" styleClass="w-full"></p-dropdown>
+      <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" (onChange)="applyFilters()" placeholder="Select Status" styleClass="w-full"></p-select>
     </div>
     
     <div class="col-12 md:col-6 lg:col-3">
-      <p-dropdown [options]="typeOptions" [(ngModel)]="selectedType" placeholder="Select Type" styleClass="w-full"></p-dropdown>
+      <p-select [options]="typeOptions" [(ngModel)]="selectedType" (onChange)="applyFilters()" placeholder="Select Type" styleClass="w-full"></p-select>
     </div>
     
     <div class="col-12 md:col-6 lg:col-2 flex justify-content-end">
@@ -39,13 +39,13 @@
     </ng-template>
     <ng-template pTemplate="body" let-appointment>
       <tr>
-        <td>{{ appointment.patientName }}</td>
-        <td>{{ appointment.doctorName }}</td>
-        <td>{{ appointment.date }}</td>
-        <td>{{ appointment.startTime }} - {{ appointment.endTime }}</td>
-        <td>{{ appointment.type }}</td>
+        <td>{{ appointment.PatientName }}</td>
+        <td>{{ appointment.DoctorName }}</td>
+        <td>{{ appointment.AppointmentDate }}</td>
+        <td>{{ appointment.StartTime }} - {{ appointment.EndTime }}</td>
+        <td>{{ appointment.AppointmentType }}</td>
         <td>
-          <p-tag [value]="appointment.status" [severity]="getSeverity(appointment.status)"></p-tag>
+          <p-tag [value]="appointment.Status" [severity]="getSeverity(appointment.Status)"></p-tag>
         </td>
         <td>
           <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text" (click)="viewAppointment(appointment)"></button>
