@@ -1,13 +1,15 @@
+// src/app/app.component.ts
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { MenubarModule } from 'primeng/menubar';
-import { AuthService } from './core/services/auth.service';
-import { FormsModule } from '@angular/forms';
-import { ToastModule } from 'primeng/toast';
 
+// PrimeNG
+import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
+import { MenuItem } from 'primeng/api';
+
+import { AuthService } from './core/services/auth.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
@@ -15,25 +17,29 @@ import { ToastModule } from 'primeng/toast';
   imports: [
     CommonModule,
     RouterOutlet,
-    ButtonModule,
     MenubarModule,
-    FormsModule,
+    ButtonModule,
     ToastModule
-  ],
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   items: MenuItem[] = [];
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.updateMenu();
+
+    // Update menu when user logs in/out
+    this.authService.currentUser.subscribe(() => {
+      this.updateMenu();
+    });
   }
 
   updateMenu() {
-    if (this.authService.isLoggedIn()) {
+    if (this.isLoggedIn()) {
       const role = this.authService.getUserRole();
       
       // Basic menu items
@@ -42,43 +48,126 @@ export class AppComponent {
           label: 'Dashboard',
           icon: 'pi pi-home',
           routerLink: role === 'Admin' ? '/admin' : 
-                     (role === 'Doctor' ? '/doctor' : '/patient')
+                     (role === 'Doctor' ? '/doctor' : '/patient/dashboard')
         }
       ];
       
-      // Additional menu items based on role
-      if (role === 'Admin' || role === 'Doctor') {
+      // Admin gets access to all modules
+      if (role === 'Admin') {
         this.items.push(
           {
-            label: 'Patients',
+            label: 'Patient Management',
             icon: 'pi pi-users',
-            routerLink: '/patients'
+            items: [
+              {
+                label: 'All Patients',
+                icon: 'pi pi-list',
+                routerLink: '/patient'
+              },
+              {
+                label: 'Add Patient',
+                icon: 'pi pi-user-plus',
+                routerLink: '/patient/new'
+              }
+            ]
+          },
+          {
+            label: 'Doctor Management',
+            icon: 'pi pi-user-edit',
+            routerLink: '/doctor'
           },
           {
             label: 'Appointments',
             icon: 'pi pi-calendar',
-            routerLink: '/appointments'
+            routerLink: '/appointment'
+          },
+          {
+            label: 'Beds & Rooms',
+            icon: 'pi pi-th-large',
+            routerLink: '/beds'
+          },
+          {
+            label: 'Pharmacy',
+            icon: 'pi pi-briefcase',
+            items: [
+              {
+                label: 'Dashboard',
+                icon: 'pi pi-home',
+                routerLink: '/pharmacy'
+              },
+              {
+                label: 'Add Inventory',
+                icon: 'pi pi-plus',
+                routerLink: '/pharmacy/inventory/add'
+              }
+            ]
+          },
+          {
+            label: 'Billing',
+            icon: 'pi pi-dollar',
+            routerLink: '/billing'
+          },
+          {
+            label: 'Vitals',
+            icon: 'pi pi-heart',
+            routerLink: '/vitals/log'
           }
         );
       }
       
-      if (role === 'Admin') {
+      // Doctor gets access to patients, appointments, pharmacy, and vitals
+      else if (role === 'Doctor') {
         this.items.push(
           {
-            label: 'Administration',
-            icon: 'pi pi-cog',
-            items: [
-              {
-                label: 'Users',
-                icon: 'pi pi-user-edit',
-                routerLink: '/admin/users'
-              },
-              {
-                label: 'Reports',
-                icon: 'pi pi-chart-bar',
-                routerLink: '/admin/reports'
-              }
-            ]
+            label: 'Patients',
+            icon: 'pi pi-users',
+            routerLink: '/patient'
+          },
+          {
+            label: 'Appointments',
+            icon: 'pi pi-calendar',
+            routerLink: '/appointment'
+          },
+          {
+            label: 'Beds',
+            icon: 'pi pi-th-large',
+            routerLink: '/beds'
+          },
+          {
+            label: 'Pharmacy',
+            icon: 'pi pi-briefcase',
+            routerLink: '/pharmacy'
+          },
+          {
+            label: 'Record Vitals',
+            icon: 'pi pi-heart',
+            routerLink: '/vitals/log'
+          }
+        );
+      }
+      
+      // Patient gets access to their appointments, vitals, and prescriptions
+      else if (role === 'Patient') {
+        this.items.push(
+          {
+            label: 'My Profile',
+            icon: 'pi pi-user',
+            routerLink: `/patient/${this.authService.currentUserValue.patientId}`
+          },
+          {
+            label: 'Appointments',
+            icon: 'pi pi-calendar',
+            routerLink: '/appointment'
+          },
+          {
+            label: 'My Prescriptions',
+            icon: 'pi pi-file-pdf',
+            routerLink: '/pharmacy/prescriptions'
+          },
+          {
+            label: 'My Vitals',
+            icon: 'pi pi-heart',
+            routerLink: `/patient/${this.authService.currentUserValue.patientId}`
           }
         );
       }
@@ -88,6 +177,11 @@ export class AppComponent {
           label: 'Login',
           icon: 'pi pi-sign-in',
           routerLink: '/auth/login'
+        },
+        {
+          label: 'Register',
+          icon: 'pi pi-user-plus',
+          routerLink: '/auth/register'
         }
       ];
     }
@@ -99,6 +193,5 @@ export class AppComponent {
   
   logout() {
     this.authService.logout();
-    this.updateMenu();
   }
 }

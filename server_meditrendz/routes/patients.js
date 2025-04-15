@@ -74,4 +74,67 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+
+router.post('/', async (req, res) => {
+  const { 
+    firstName, lastName, email, password, phoneNumber, dateOfBirth, gender, 
+    bloodGroup, height, weight, address, allergies, medicalHistory,
+    emergencyContactName, emergencyContactNumber, emergencyContactRelation 
+  } = req.body;
+  
+  if (!firstName || !lastName || !email || !password || !dateOfBirth || !gender) {
+    return res.status(400).json({ success: false, message: 'Required fields are missing' });
+  }
+  
+  try {
+    const [existingUsers] = await db.query('SELECT * FROM User WHERE Email = ?', [email]);
+    
+    if (existingUsers.length > 0) {
+      return res.status(400).json({ success: false, message: 'A user with this email already exists' });
+    }
+    
+    try {
+      const [results] = await db.query(
+        'CALL addPatientProcedure(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @patientId)',
+        [
+          email, password, firstName, lastName, phoneNumber || null, 
+          dateOfBirth, gender, bloodGroup || null, height || null, weight || null, 
+          address || null, medicalHistory || null, allergies || null,
+          emergencyContactName || null, emergencyContactNumber || null, emergencyContactRelation || null
+        ]
+      );
+      
+      const [output] = await db.query('SELECT @patientId as patientId');
+      console.log('Output from procedure:', output);
+      
+      if (output && output[0] && output[0].patientId > 0) {
+        res.status(201).json({
+          success: true,
+          message: 'Patient created successfully',
+          patientId: output[0].patientId
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: 'Failed to create patient - procedure did not return a valid ID'
+        });
+      }
+    } catch (procError) {
+      console.error('Error executing stored procedure:', procError);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Error in stored procedure execution',
+        error: procError.message
+      });
+    }
+  } catch (error) {
+    console.error('Error creating patient:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error',
+      error: error.message 
+    });
+  }
+});
+
 module.exports = router;

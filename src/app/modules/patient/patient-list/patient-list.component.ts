@@ -68,6 +68,10 @@ export class PatientListComponent implements OnInit {
     this.router.navigate(['/patient', patientId]);
   }
 
+  addNewPatient() {
+    this.router.navigate(['/patient', 'new']);
+  }
+
   getAge(dateOfBirth: string): number {
     const dob = new Date(dateOfBirth);
     const today = new Date();

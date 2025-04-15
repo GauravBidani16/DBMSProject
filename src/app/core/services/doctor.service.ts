@@ -13,13 +13,11 @@ export class DoctorService {
 
   constructor(private http: HttpClient) { }
 
-  // Get all doctors
   getDoctors(): Observable<any> {
     return this.http.get(`${API_URL}/doctors`)
       .pipe(
         map((response: any) => {
           if (response && response.success) {
-            // Format doctors for dropdown
             return response.data;
           }
           return [];

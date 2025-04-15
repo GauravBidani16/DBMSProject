@@ -13,7 +13,6 @@ export class PatientService {
 
   constructor(private http: HttpClient) { }
 
-  // Get all patients
   getAllPatients(): Observable<any> {
     return this.http.get(`${API_URL}/patients`)
       .pipe(
@@ -30,7 +29,6 @@ export class PatientService {
       );
   }
 
-  // Get patient by ID
   getPatientById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/patients/${id}`)
       .pipe(
@@ -47,7 +45,6 @@ export class PatientService {
       );
   }
 
-  // Update patient information
   updatePatient(id: number, patientData: any): Observable<any> {
     return this.http.put(`${API_URL}/patients/${id}`, patientData)
       .pipe(
@@ -58,7 +55,16 @@ export class PatientService {
       );
   }
 
-  // Get patient's medical history
+  createPatient(patientData: any): Observable<any> {
+    return this.http.post(`${API_URL}/patients`, patientData)
+      .pipe(
+        catchError(error => {
+          console.error('Error creating patient:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
   getPatientMedicalHistory(id: number): Observable<any> {
     return this.http.get(`${API_URL}/patients/${id}/history`)
       .pipe(
@@ -75,7 +81,6 @@ export class PatientService {
       );
   }
 
-  // Get patient's appointments
   getPatientAppointments(id: number): Observable<any> {
     return this.http.get(`${API_URL}/appointments/patient/${id}`)
       .pipe(
@@ -92,7 +97,6 @@ export class PatientService {
       );
   }
 
-  // Get patient's prescriptions
   getPatientPrescriptions(id: number): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/prescriptions/patient/${id}`)
       .pipe(
@@ -106,6 +110,16 @@ export class PatientService {
           console.error(`Error fetching prescriptions for patient ${id}:`, error);
           return throwError(() => error);
         })
+      );
+  }
+
+  getPatients(): Observable<any> {
+    return this.getAllPatients()
+      .pipe(
+        map(patients => patients.map((patient: any) => ({
+          label: `${patient.FirstName} ${patient.LastName}`,
+          value: patient.PatientID
+        })))
       );
   }
 }

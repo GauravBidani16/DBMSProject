@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api';
 
 import { PatientService } from '../../../core/services/patient.service';
 import { TextareaModule } from 'primeng/textarea';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-patient-edit',
@@ -38,11 +39,14 @@ export class PatientEditComponent implements OnInit {
   patient: any = {
     firstName: '',
     lastName: '',
+    email: '',
+    password: '',
     dateOfBirth: null,
     gender: null,
     bloodGroup: null,
-    email: '',
     phoneNumber: '',
+    height: null,
+    weight: null,
     address: '',
     allergies: '',
     medicalHistory: '',
@@ -53,6 +57,7 @@ export class PatientEditComponent implements OnInit {
   isNewPatient = false;
   loading = false;
   defaultDOB = new Date()
+  currentUser: any;
 
   genderOptions = [
     { label: 'Male', value: 'Male' },
@@ -76,12 +81,15 @@ export class PatientEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private patientService: PatientService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private authService: AuthService
+  ) {
+    this.currentUser = this.authService.currentUserValue;
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      if (params['id'] === 'new') {
+      if (this.route?.routeConfig?.path === 'new') {
         this.isNewPatient = true;
       } else {
         this.patientId = +params['id'];
@@ -149,14 +157,36 @@ export class PatientEditComponent implements OnInit {
     };
 
     if (this.isNewPatient) {
-      // TODO: Add implementation for creating a new patient
-      // This would require a new method in the PatientService
-      this.loading = false;
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Not Implemented',
-        detail: 'Creating new patients is not implemented yet'
-      });
+      const newPatientData = {
+        ...patientData,
+        email: this.patient.email,
+        password: this.patient.password
+      };
+      
+      this.patientService.createPatient(newPatientData)
+        .subscribe({
+          next: (response) => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Patient created successfully'
+            });
+            
+            // Navigate to patient list after short delay
+            setTimeout(() => {
+              this.router.navigate(['/patient']);
+            }, 2000);
+          },
+          error: (error) => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: error.error?.message || 'Failed to create patient'
+            });
+          }
+        });
     } else {
       // Update existing patient
       this.patientService.updatePatient(this.patientId, patientData)

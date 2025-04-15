@@ -13,7 +13,6 @@ export class BillingService {
 
   constructor(private http: HttpClient) { }
 
-  // Get all services/billable items
   getServices(): Observable<any> {
     return this.http.get(`${API_URL}/billing/services`)
       .pipe(
@@ -30,7 +29,6 @@ export class BillingService {
       );
   }
 
-  // Get all bills
   getBills(): Observable<any> {
     return this.http.get(`${API_URL}/billing/bills`)
       .pipe(
@@ -47,7 +45,6 @@ export class BillingService {
       );
   }
 
-  // Get bill by ID
   getBillById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/billing/bills/${id}`)
       .pipe(
@@ -64,7 +61,6 @@ export class BillingService {
       );
   }
 
-  // Create new bill
   createBill(billData: any): Observable<any> {
     return this.http.post(`${API_URL}/billing/bills`, billData)
       .pipe(
@@ -75,7 +71,6 @@ export class BillingService {
       );
   }
 
-  // Update bill status
   updateBillStatus(id: number, status: string): Observable<any> {
     return this.http.patch(`${API_URL}/billing/bills/${id}/status`, { status })
       .pipe(
@@ -86,7 +81,6 @@ export class BillingService {
       );
   }
 
-  // Get payment methods
   getPaymentMethods(): Observable<any> {
     return this.http.get(`${API_URL}/billing/payment-methods`)
       .pipe(
@@ -103,7 +97,6 @@ export class BillingService {
       );
   }
 
-  // Record payment
   recordPayment(paymentData: any): Observable<any> {
     return this.http.post(`${API_URL}/billing/payments`, paymentData)
       .pipe(
