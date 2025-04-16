@@ -160,11 +160,6 @@ export class AppComponent implements OnInit {
             routerLink: '/appointment'
           },
           {
-            label: 'My Prescriptions',
-            icon: 'pi pi-file-pdf',
-            routerLink: '/pharmacy/prescriptions'
-          },
-          {
             label: 'My Vitals',
             icon: 'pi pi-heart',
             routerLink: `/patient/${this.authService.currentUserValue.patientId}`

@@ -15,6 +15,7 @@ import { DoctorService } from '../../../core/services/doctor.service';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { PatientService } from '../../../core/services/patient.service';
 import { SelectModule } from 'primeng/select';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-appointment-form',
@@ -82,12 +83,49 @@ export class AppointmentFormComponent implements OnInit {
     private doctorService: DoctorService,
     private patientService: PatientService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.loadPatients();
-    this.loadDoctors();
+    this.authService.currentUser.subscribe({
+      next: (data) => {
+        console.log(data);
+        if(data && data.role == 'Patient') {
+          this.loadPatientById(data.patientId);
+          this.loadDoctors();
+        } else if (data && data.role == 'Doctor') {
+          this.loadPatients();
+          this.loadDoctorById(data.doctorId);
+        } else {
+          this.loadPatients();
+          this.loadDoctors();
+        }
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No user found. Please log in.'
+        });
+      }
+    })
+  }
+
+  loadPatientById(id: any) {
+    this.patientService.getPatientById(id)
+      .subscribe({
+        next: (data) => {
+          this.patients = [data];
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load patient information.'
+          });
+        }
+      });
   }
 
   loadPatients() {
@@ -103,6 +141,24 @@ export class AppointmentFormComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'Failed to load patients'
+          });
+        }
+      });
+  }
+
+  loadDoctorById(id: any) {
+    this.doctorService.getDoctorById(id)
+      .subscribe({
+        next: (data: any[]) => {
+          this.doctors = [data];
+          console.log(data);
+          
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load doctors'
           });
         }
       });

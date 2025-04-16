@@ -13,6 +13,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 import { PatientService } from '../../../core/services/patient.service';
+import { VitalsService } from '../../../core/services/vitals.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-patient-detail',
@@ -35,16 +37,21 @@ export class PatientDetailComponent implements OnInit {
   patient: any = null;
   appointments: any[] = [];
   prescriptions: any[] = [];
+  vitalsHistory: any[] = [];
   loading = true;
+  currentUserRole: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private patientService: PatientService,
-    private messageService: MessageService
-  ) {}
+    private vitalsService: VitalsService,
+    private messageService: MessageService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
+    this.currentUserRole = this.authService.getUserRole();
     this.route.params.subscribe(params => {
       this.patientId = +params['id'];
       this.loadPatientData();
@@ -53,19 +60,14 @@ export class PatientDetailComponent implements OnInit {
 
   loadPatientData() {
     this.loading = true;
-    
-    // Load patient details
     this.patientService.getPatientById(this.patientId)
       .subscribe({
         next: (data) => {
           this.patient = data;
           this.loading = false;
-          
-          // Load appointments
+
           this.loadAppointments();
-          
-          // Load prescriptions
-          this.loadPrescriptions();
+          this.loadVitalsHistory();
         },
         error: (error) => {
           this.messageService.add({
@@ -90,14 +92,14 @@ export class PatientDetailComponent implements OnInit {
       });
   }
 
-  loadPrescriptions() {
-    this.patientService.getPatientPrescriptions(this.patientId)
+  loadVitalsHistory() {
+    this.vitalsService.getPatientVitals(this.patientId)
       .subscribe({
         next: (data) => {
-          this.prescriptions = data;
+          this.vitalsHistory = data;
         },
         error: (error) => {
-          console.error('Error loading prescriptions:', error);
+          console.error('Error loading vitals history:', error);
         }
       });
   }
@@ -107,11 +109,11 @@ export class PatientDetailComponent implements OnInit {
     const today = new Date();
     let age = today.getFullYear() - dob.getFullYear();
     const monthDiff = today.getMonth() - dob.getMonth();
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
       age--;
     }
-    
+
     return age;
   }
 
@@ -129,13 +131,17 @@ export class PatientDetailComponent implements OnInit {
   }
 
   scheduleAppointment() {
-    this.router.navigate(['/appointment/create'], { 
-      queryParams: { patientId: this.patientId } 
+    this.router.navigate(['/appointment/create'], {
+      queryParams: { patientId: this.patientId }
     });
   }
 
   goBack() {
-    this.router.navigate(['/patient']);
+    if (this.currentUserRole == 'Patient'){
+      this.router.navigate(['patient', 'dashboard']);
+    } else {
+      this.router.navigate(['/patient']);
+    }
   }
 
   editPatient() {

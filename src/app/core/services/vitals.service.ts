@@ -57,4 +57,20 @@ export class VitalsService {
         })
       );
   }
+
+  getLatestVitals(patientId: number): Observable<any> {
+    return this.http.get(`${API_URL}/vitals/patient/${patientId}/latest`)
+      .pipe(
+        map((response: any) => {
+          if (response && response.success) {
+            return response.data;
+          }
+          return null;
+        }),
+        catchError(error => {
+          console.error('Error fetching latest vitals:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

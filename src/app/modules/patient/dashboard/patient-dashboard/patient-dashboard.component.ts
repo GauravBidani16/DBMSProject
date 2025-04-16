@@ -1,4 +1,3 @@
-// src/app/modules/patient/dashboard/patient-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -12,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { VitalsService } from '../../../../core/services/vitals.service';
 
 @Component({
   selector: 'app-patient-dashboard',
@@ -33,12 +33,15 @@ export class PatientDashboardComponent implements OnInit {
   patientData: any = null;
   upcomingAppointments: any[] = [];
   recentPrescriptions: any[] = [];
+  latestVitals: any = null;
   loading = true;
+new: any;
 
   constructor(
     private authService: AuthService,
     private patientService: PatientService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private vitalsService: VitalsService
   ) {
     this.currentUser = this.authService.currentUserValue;
   }
@@ -46,6 +49,7 @@ export class PatientDashboardComponent implements OnInit {
   ngOnInit(): void {
     if (this.currentUser && this.currentUser.patientId) {
       this.loadPatientData(this.currentUser.patientId);
+      this.loadLatestVitals(this.currentUser.patientId);
     } else {
       this.loading = false;
       this.messageService.add({
@@ -79,17 +83,59 @@ export class PatientDashboardComponent implements OnInit {
     this.patientService.getPatientAppointments(patientId)
       .subscribe({
         next: (data) => {
-          // Sort and get upcoming appointments
-          this.upcomingAppointments = data
-            .filter((app: any) => app.Status === 'Scheduled')
-            .sort((a: any, b: any) => new Date(a.AppointmentDate).getTime() - new Date(b.AppointmentDate).getTime())
-            .slice(0, 5); // Get only the first 5 upcoming appointments
+          // Make sure data is coming through
+          console.log('Fetched appointments:', data);
           
+          // Sort by date to get upcoming appointments
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Set to beginning of day for proper comparison
+          
+          this.upcomingAppointments = data
+            .filter((app: any) => {
+              // Convert string date to Date object for comparison
+              const appDate = new Date(app.AppointmentDate);
+              appDate.setHours(0, 0, 0, 0);
+              
+              // Filter for upcoming appointments (today or later) and with "Scheduled" status
+              return appDate >= today && app.Status === 'Scheduled';
+            })
+            .sort((a: any, b: any) => {
+              // Sort by date (ascending)
+              const dateA = new Date(a.AppointmentDate);
+              const dateB = new Date(b.AppointmentDate);
+              
+              // If same date, sort by time
+              if (dateA.getTime() === dateB.getTime()) {
+                return a.StartTime.localeCompare(b.StartTime);
+              }
+              
+              return dateA.getTime() - dateB.getTime();
+            });
+          
+          console.log('Upcoming appointments:', this.upcomingAppointments);
           this.loading = false;
         },
         error: (error) => {
           this.loading = false;
           console.error('Error loading appointments:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load your appointments'
+          });
+        }
+      });
+  }
+
+  loadLatestVitals(patientId: number) {
+    this.vitalsService.getLatestVitals(patientId)
+      .subscribe({
+        next: (data) => {
+          this.latestVitals = data;
+          console.log('Latest vitals:', data);
+        },
+        error: (error) => {
+          console.error('Error loading vitals:', error);
         }
       });
   }
@@ -109,6 +155,13 @@ export class PatientDashboardComponent implements OnInit {
       });
   }
 
+  getNextAppointment() {
+    if (this.upcomingAppointments && this.upcomingAppointments.length > 0) {
+      return this.upcomingAppointments[0];
+    }
+    return null;
+  }
+
   getSeverity(status: string) {
     switch (status) {
       case 'Scheduled':
@@ -121,11 +174,13 @@ export class PatientDashboardComponent implements OnInit {
         return 'info';
     }
   }
-
-  getNextAppointment() {
-    return this.upcomingAppointments.length > 0 ? this.upcomingAppointments[0] : null;
-  }
   
+  
+  formatDate(dateOfBirth: string) {
+    const dob = new Date(dateOfBirth);
+    return dob.getFullYear() + "-" + dob.getMonth() + "-" + dob.getDay();
+  }
+
   calculateAge(dateOfBirth: string): number {
     const dob = new Date(dateOfBirth);
     const today = new Date();

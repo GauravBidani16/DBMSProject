@@ -5,13 +5,6 @@
   <h2>Appointments</h2>
   
   <div class="grid mb-4">
-    <div class="col-12 md:col-6 lg:col-4">
-      <span class="p-input-icon-left w-full">
-        <i class="pi pi-search"></i>
-        <input type="text" pInputText class="w-full" placeholder="Search by patient or doctor" [(ngModel)]="searchText" (onKeyDown)="applyFilters()">
-      </span>
-    </div>
-    
     <div class="col-12 md:col-6 lg:col-3">
       <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" (onChange)="applyFilters()" placeholder="Select Status" styleClass="w-full"></p-select>
     </div>
@@ -19,8 +12,9 @@
     <div class="col-12 md:col-6 lg:col-3">
       <p-select [options]="typeOptions" [(ngModel)]="selectedType" (onChange)="applyFilters()" placeholder="Select Type" styleClass="w-full"></p-select>
     </div>
-    
-    <div class="col-12 md:col-6 lg:col-2 flex justify-content-end">
+    <div class="col-12 md:col-6 lg:col-3">
+    </div>
+    <div class="col-12 md:col-6 lg:col-3 flex justify-content-end">
       <button pButton pRipple label="New Appointment" icon="pi pi-plus" (click)="createAppointment()"></button>
     </div>
   </div>

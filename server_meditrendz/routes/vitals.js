@@ -192,4 +192,61 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/patient/:id/latest', async (req, res) => {
+  try {
+    const [results] = await db.query(
+      'CALL getPatientLatestVitalsProcedure(?)',
+      [req.params.id]
+    );
+    
+    // The result is in the first element of the first row
+    const vitals = results[0][0];
+    
+    if (!vitals || !vitals.LogID) {
+      return res.json({ success: true, data: null });
+    }
+    
+    // Format the response to match the structure used by the frontend
+    const formattedData = {
+      LogID: vitals.LogID,
+      RecordedAt: vitals.RecordedAt,
+      Notes: vitals.Notes,
+      heartRate: vitals.HeartRate,
+      bloodPressure: (vitals.Systolic && vitals.Diastolic) ? {
+        systolic: vitals.Systolic,
+        diastolic: vitals.Diastolic
+      } : null,
+      temperature: vitals.Temperature,
+      oxygenSaturation: vitals.SpO2
+    };
+    
+    res.json({ success: true, data: formattedData });
+  } catch (error) {
+    console.error(`Error fetching latest vitals for patient ${req.params.id}:`, error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+router.get('/patient/:patientId', async (req, res) => {
+  try {
+    const [results] = await db.query(
+      'CALL getPatientVitalHistory(?)',
+      [req.params.patientId]
+    );
+    
+    const vitals = results[0].map(record => ({
+      ...record,
+      bloodPressure: (record.Systolic && record.Diastolic) ? {
+        systolic: record.Systolic,
+        diastolic: record.Diastolic
+      } : null
+    }));
+    
+    res.json({ success: true, data: vitals });
+  } catch (error) {
+    console.error('Error fetching vitals:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 module.exports = router;

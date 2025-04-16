@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // PrimeNG Imports
 import { TableModule } from 'primeng/table';
@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { SelectModule } from 'primeng/select';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-appointment-list',
@@ -59,14 +60,33 @@ export class AppointmentListComponent implements OnInit {
   searchText: string = '';
   viewAppointmentDialog: boolean = false;
   selectedAppointment: any = null;
+  patientId: any = null;
 
   constructor(
     private appointmentService: AppointmentService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authService.currentUser.subscribe({
+      next: (data) => {
+        console.log(data);
+        if(data && data.role == 'Patient') {
+          this.patientId = data.patientId;
+        } else {
+          this.loadAppointments();
+        }
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No user found. Please log in.'
+        });
+      }
+    })
     this.loadAppointments();
   }
 
@@ -75,7 +95,11 @@ export class AppointmentListComponent implements OnInit {
     this.appointmentService.getAppointments()
       .subscribe({
         next: (data) => {
-          this.appointments = data;
+          if (this.patientId && this.patientId > 0) {
+            this.appointments = data.filter((e: any) => e.PatientID == this.patientId);
+          } else {
+            this.appointments = data;
+          }
           this.applyFilters();
           this.loading = false;
         },

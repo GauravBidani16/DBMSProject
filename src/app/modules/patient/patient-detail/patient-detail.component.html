@@ -123,34 +123,46 @@
       </p-card>
     </p-tabPanel>
     
-    <!-- Prescriptions Tab -->
-    <p-tabPanel header="Prescriptions">
+    <p-tabPanel header="Vitals History">
       <p-card>
-        <p-table [value]="prescriptions" styleClass="p-datatable-sm" [paginator]="true" [rows]="5">
+        <div class="flex justify-content-between mb-3">
+          <h3 class="m-0">Vital Signs History</h3>
+          <button pButton pRipple label="Record Vitals" icon="pi pi-plus" 
+                  [routerLink]="['/vitals/log']" [queryParams]="{patientId: patientId}"></button>
+        </div>
+        
+        <p-table [value]="vitalsHistory" styleClass="p-datatable-sm" [paginator]="true" [rows]="10">
           <ng-template pTemplate="header">
             <tr>
-              <th>Doctor</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>Date Recorded</th>
+              <th>Heart Rate</th>
+              <th>Blood Pressure</th>
+              <th>Temperature</th>
+              <th>Oxygen Saturation</th>
+              <th>Recorded By</th>
+              <th>Notes</th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-prescription>
+          <ng-template pTemplate="body" let-vital>
             <tr>
-              <td>{{ prescription.DoctorName }}</td>
-              <td>{{ prescription.PrescriptionDate | date:'mediumDate' }}</td>
+              <td>{{ vital.RecordedAt | date:'medium' }}</td>
+              <td>{{ vital.heartRate ? vital.heartRate + ' bpm' : '-' }}</td>
               <td>
-                <p-tag [value]="prescription.Status" [severity]="prescription.Status === 'Dispensed' ? 'success' : 'info'"></p-tag>
+                <span *ngIf="vital.bloodPressure">
+                  {{ vital.bloodPressure.systolic }}/{{ vital.bloodPressure.diastolic }} mmHg
+                </span>
+                <span *ngIf="!vital.bloodPressure">-</span>
               </td>
-              <td>
-                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text" [routerLink]="['/pharmacy/prescriptions', prescription.PrescriptionID]"></button>
-              </td>
+              <td>{{ vital.temperature ? vital.temperature + '°C' : '-' }}</td>
+              <td>{{ vital.oxygenSaturation ? vital.oxygenSaturation + '%' : '-' }}</td>
+              <td>{{ vital.RecordedByName || 'Self-recorded' }}</td>
+              <td>{{ vital.Notes || '-' }}</td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="4" class="text-center p-4">
-                No prescriptions found.
+              <td colspan="7" class="text-center p-4">
+                No vitals records found for this patient.
               </td>
             </tr>
           </ng-template>

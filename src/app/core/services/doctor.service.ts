@@ -28,4 +28,21 @@ export class DoctorService {
         })
       );
   }
+
+  // Get doctor by ID
+  getDoctorById(id: number): Observable<any> {
+    return this.http.get(`${API_URL}/doctors/${id}`)
+      .pipe(
+        map((response: any) => {
+          if (response && response.success) {
+            return response.data;
+          }
+          return null;
+        }),
+        catchError(error => {
+          console.error(`Error fetching doctor with ID ${id}:`, error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

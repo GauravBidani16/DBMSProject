@@ -13,7 +13,7 @@
         <div class="text-900 font-medium text-xl mb-2">Personal Info</div>
         <div class="text-900 text-lg">
           <div>{{ patientData.FirstName }} {{ patientData.LastName }}</div>
-          <div>{{ calculateAge(patientData.DateOfBirth) }} years old</div>
+          <div>Age: {{ calculateAge(patientData.DateOfBirth) }}</div>
           <div>Blood Type: {{ patientData.BloodGroup || 'Not specified' }}</div>
         </div>
       </div>
@@ -45,16 +45,36 @@
       <div class="text-center">
         <i class="pi pi-heart text-4xl text-primary mb-3"></i>
         <div class="text-900 font-medium text-xl mb-2">Latest Vitals</div>
-        <div class="text-900 text-lg">
-          <div><span class="font-medium">BP:</span> 120/80</div>
-          <div><span class="font-medium">HR:</span> 72 bpm</div>
-          <div><span class="font-medium">Temp:</span> 36.8°C</div>
+        <div *ngIf="latestVitals" class="text-900 text-lg">
+          <div *ngIf="latestVitals.bloodPressure">
+            <span class="font-medium">BP:</span> 
+            {{ latestVitals.bloodPressure.systolic }}/{{ latestVitals.bloodPressure.diastolic }} mmHg
+          </div>
+          <div *ngIf="latestVitals.heartRate">
+            <span class="font-medium">HR:</span> {{ latestVitals.heartRate }} bpm
+          </div>
+          <div *ngIf="latestVitals.temperature">
+            <span class="font-medium">Temp:</span> {{ latestVitals.temperature }}°C
+          </div>
+          <div *ngIf="latestVitals.oxygenSaturation">
+            <span class="font-medium">SpO2:</span> {{ latestVitals.oxygenSaturation }}%
+          </div>
+          <small class="text-500 block mt-2">
+            Recorded: {{ latestVitals.RecordedAt | date:'short' }}
+          </small>
         </div>
+        <div *ngIf="!latestVitals" class="text-900 text-lg">
+          <div>No vitals recorded yet</div>
+        </div>
+        <button pButton pRipple label="Record Vitals" icon="pi pi-plus" 
+                class="p-button-sm mt-2" 
+                [routerLink]="['/vitals/log']" 
+                [queryParams]="{patientId: patientData?.PatientID}"></button>
       </div>
     </p-card>
   </div>
   
-  <!-- Medication Reminder Card -->
+  <!-- Medication Reminder Card
   <div class="col-12 md:col-6 lg:col-3">
     <p-card styleClass="h-full">
       <div class="text-center">
@@ -69,7 +89,7 @@
         </div>
       </div>
     </p-card>
-  </div>
+  </div> -->
   
   <!-- Upcoming Appointments Table -->
   <div class="col-12 lg:col-8">
@@ -81,7 +101,6 @@
             <th>Date</th>
             <th>Time</th>
             <th>Type</th>
-            <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-appointment>
@@ -90,9 +109,6 @@
             <td>{{ appointment.AppointmentDate | date:'mediumDate' }}</td>
             <td>{{ appointment.StartTime }}</td>
             <td>{{ appointment.AppointmentType }}</td>
-            <td>
-              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text" [routerLink]="['/appointment', appointment.AppointmentID]"></button>
-            </td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -109,49 +125,6 @@
       </div>
     </p-card>
   </div>
-  
-  <!-- Recent Prescriptions -->
-  <div class="col-12 lg:col-4">
-    <p-card header="Recent Prescriptions" styleClass="h-full">
-      <ul class="list-none p-0 m-0">
-        <li *ngFor="let prescription of recentPrescriptions" class="flex align-items-center py-2 border-bottom-1 surface-border">
-          <div class="flex-grow-1">
-            <div class="font-medium text-900">{{ prescription.PrescriptionDate | date:'mediumDate' }}</div>
-            <div class="text-500">Dr. {{ prescription.DoctorName }}</div>
-          </div>
-          <button pButton pRipple type="button" icon="pi pi-file" class="p-button-text p-button-rounded" [routerLink]="['/pharmacy/prescriptions', prescription.PrescriptionID]"></button>
-        </li>
-      </ul>
-      <div *ngIf="recentPrescriptions.length === 0" class="text-center p-4">
-        <div>No recent prescriptions</div>
-      </div>
-      <div class="flex justify-content-end mt-3" *ngIf="recentPrescriptions.length > 0">
-        <button pButton pRipple label="View All Prescriptions" icon="pi pi-list" class="p-button-text" routerLink="/pharmacy/prescriptions"></button>
-      </div>
-    </p-card>
-  </div>
-  
-  <!-- Quick Actions -->
-  <div class="col-12">
-    <p-card header="Quick Actions">
-      <div class="grid">
-        <div class="col-12 md:col-4 text-center">
-          <button pButton pRipple label="Schedule Appointment" icon="pi pi-calendar-plus" class="p-button-primary w-10rem" routerLink="/appointment/create"></button>
-        </div>
-        <div class="col-12 md:col-4 text-center">
-          <button pButton pRipple label="View Records" icon="pi pi-file" class="p-button-secondary w-10rem" [routerLink]="['/patient', patientData.PatientID]"></button>
-        </div>
-        <div class="col-12 md:col-4 text-center">
-          <button pButton pRipple label="Log Vitals" icon="pi pi-heart" class="p-button-success w-10rem" routerLink="/vitals/log"></button>
-        </div>
-      </div>
-    </p-card>
-  </div>
-</div>
-
-<div class="flex justify-content-center align-items-center min-h-screen" *ngIf="loading">
-  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-</div>
 
 <div class="card" *ngIf="!patientData && !loading">
   <div class="p-4 text-center">
