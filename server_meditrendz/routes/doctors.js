@@ -22,7 +22,6 @@ router.get('/', async (req, res) => {
 
 router.get('/department', async (req, res) => {
   try {
-    console.log('depr');
     const [rows] = await db.query('SELECT * FROM Department ORDER BY Name');
     
     res.json({ success: true, data: rows });

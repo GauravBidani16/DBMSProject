@@ -19,6 +19,7 @@ const pharmacyRoutes = require('./routes/pharmacy');
 const bedRoutes = require('./routes/beds');
 const vitalsRoutes = require('./routes/vitals');
 const billingRoutes = require('./routes/billing');
+const adminRoutes = require('./routes/admin');
 
 // Route middlewares
 app.use('/api/auth', authRoutes);
@@ -30,6 +31,7 @@ app.use('/api/pharmacy', pharmacyRoutes);
 app.use('/api/beds', bedRoutes);
 app.use('/api/vitals', vitalsRoutes);
 app.use('/api/billing', billingRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Simple test route
 app.get('/', (req, res) => {
