@@ -72,9 +72,9 @@ export class AppComponent implements OnInit {
             ]
           },
           {
-            label: 'Doctor Management',
+            label: 'Register Doctor',
             icon: 'pi pi-user-edit',
-            routerLink: '/doctor'
+            routerLink: '/admin/register-doctor'
           },
           {
             label: 'Appointments',
@@ -82,7 +82,7 @@ export class AppComponent implements OnInit {
             routerLink: '/appointment'
           },
           {
-            label: 'Beds & Rooms',
+            label: 'Beds Management',
             icon: 'pi pi-th-large',
             routerLink: '/beds'
           },
@@ -99,13 +99,13 @@ export class AppComponent implements OnInit {
                 label: 'Add Inventory',
                 icon: 'pi pi-plus',
                 routerLink: '/pharmacy/inventory/add'
+              },
+              {
+                label: 'Add Medicine',
+                icon: 'pi pi-plus',
+                routerLink: '/pharmacy/medicines/add'
               }
             ]
-          },
-          {
-            label: 'Billing',
-            icon: 'pi pi-dollar',
-            routerLink: '/billing'
           },
           {
             label: 'Vitals',
@@ -129,7 +129,7 @@ export class AppComponent implements OnInit {
             routerLink: '/appointment'
           },
           {
-            label: 'Beds',
+            label: 'Beds Management',
             icon: 'pi pi-th-large',
             routerLink: '/beds'
           },

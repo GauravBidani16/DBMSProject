@@ -1,9 +1,7 @@
-// src/app/modules/pharmacy/pharmacy-dashboard/pharmacy-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-// PrimeNG Imports
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -34,7 +32,7 @@ export class PharmacyDashboardComponent implements OnInit {
   prescriptions: any[] = [];
   
   loading = true;
-  lowStockThreshold = 50; // Threshold for low stock alert
+  lowStockThreshold = 50;
 
   constructor(
     private pharmacyService: PharmacyService,

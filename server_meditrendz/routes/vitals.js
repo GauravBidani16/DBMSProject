@@ -3,59 +3,60 @@ const router = express.Router();
 const db = require('../config/db');
 
 // Get patient vitals logs
-router.get('/patient/:patientId', async (req, res) => {
-  try {
-    // Get vitals logs
-    const [logs] = await db.query(
-      'SELECT * FROM VitalsLog WHERE PatientID = ? ORDER BY RecordedAt DESC',
-      [req.params.patientId]
-    );
+// router.get('/patient/:patientId', async (req, res) => {
+//   try {
+//     // Get vitals logs
+//     const [logs] = await db.query(
+//       'SELECT * FROM VitalsLog WHERE PatientID = ? ORDER BY RecordedAt DESC',
+//       [req.params.patientId]
+//     );
     
-    // Get detailed measurements for each log
-    const results = [];
-    for (const log of logs) {
-      // Get heart rate
-      const [heartRate] = await db.query(
-        'SELECT * FROM HeartRateLog WHERE LogID = ?',
-        [log.LogID]
-      );
+//     // Get detailed measurements for each log
+//     const results = [];
+//     for (const log of logs) {
+//       // Get heart rate
+//       const [heartRate] = await db.query(
+//         'SELECT * FROM HeartRateLog WHERE LogID = ?',
+//         [log.LogID]
+//       );
       
-      // Get blood pressure
-      const [bloodPressure] = await db.query(
-        'SELECT * FROM BloodPressureLog WHERE LogID = ?',
-        [log.LogID]
-      );
+//       // Get blood pressure
+//       const [bloodPressure] = await db.query(
+//         'SELECT * FROM BloodPressureLog WHERE LogID = ?',
+//         [log.LogID]
+//       );
       
-      // Get temperature
-      const [temperature] = await db.query(
-        'SELECT * FROM TemperatureLog WHERE LogID = ?',
-        [log.LogID]
-      );
+//       // Get temperature
+//       const [temperature] = await db.query(
+//         'SELECT * FROM TemperatureLog WHERE LogID = ?',
+//         [log.LogID]
+//       );
       
-      // Get oxygen saturation
-      const [oxygenSaturation] = await db.query(
-        'SELECT * FROM OxygenSaturationLog WHERE LogID = ?',
-        [log.LogID]
-      );
+//       // Get oxygen saturation
+//       const [oxygenSaturation] = await db.query(
+//         'SELECT * FROM OxygenSaturationLog WHERE LogID = ?',
+//         [log.LogID]
+//       );
       
-      results.push({
-        ...log,
-        heartRate: heartRate.length > 0 ? heartRate[0].HeartRate : null,
-        bloodPressure: bloodPressure.length > 0 ? {
-          systolic: bloodPressure[0].Systolic,
-          diastolic: bloodPressure[0].Diastolic
-        } : null,
-        temperature: temperature.length > 0 ? temperature[0].Temperature : null,
-        oxygenSaturation: oxygenSaturation.length > 0 ? oxygenSaturation[0].SpO2 : null
-      });
-    }
+//       results.push({
+//         ...log,
+//         heartRate: heartRate.length > 0 ? heartRate[0].HeartRate : null,
+//         bloodPressure: bloodPressure.length > 0 ? {
+//           systolic: bloodPressure[0].Systolic,
+//           diastolic: bloodPressure[0].Diastolic
+//         } : null,
+//         temperature: temperature.length > 0 ? temperature[0].Temperature : null,
+//         oxygenSaturation: oxygenSaturation.length > 0 ? oxygenSaturation[0].SpO2 : null,
+//         randomTest: ""
+//       });
+//     }
     
-    res.json({ success: true, data: results });
-  } catch (error) {
-    console.error('Error fetching vitals:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-});
+//     res.json({ success: true, data: results });
+//   } catch (error) {
+//     console.error('Error fetching vitals:', error);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// });
 
 // Add new vitals log
 router.post('/', async (req, res) => {
@@ -239,7 +240,12 @@ router.get('/patient/:patientId', async (req, res) => {
       bloodPressure: (record.Systolic && record.Diastolic) ? {
         systolic: record.Systolic,
         diastolic: record.Diastolic
-      } : null
+      } : null,
+      recordedAt: record.RecordedAt,
+      Notes: record.Notes,
+      heartRate: record.HeartRate,
+      temperature: record.Temperature,
+      oxygenSaturation: record.SpO2
     }));
     
     res.json({ success: true, data: vitals });

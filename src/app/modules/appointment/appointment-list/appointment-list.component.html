@@ -43,8 +43,8 @@
         </td>
         <td>
           <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text" (click)="viewAppointment(appointment)"></button>
-          <button *ngIf="appointment.status === 'Scheduled'" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success p-button-text" (click)="updateStatus(appointment, 'Completed')"></button>
-          <button *ngIf="appointment.status === 'Scheduled'" pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" (click)="updateStatus(appointment, 'Cancelled')"></button>
+          <button *ngIf="appointment.Status === 'Scheduled' && patientId == null" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success p-button-text" (click)="updateStatus(appointment, 'Completed')"></button>
+          <button *ngIf="appointment.Status === 'Scheduled' && patientId == null" pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" (click)="updateStatus(appointment, 'Cancelled')"></button>
         </td>
       </tr>
     </ng-template>

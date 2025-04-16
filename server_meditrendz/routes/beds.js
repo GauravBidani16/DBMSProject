@@ -226,7 +226,7 @@ router.post('/admissions/:id/discharge', async (req, res) => {
   try {
     // Update admission record
     const [updateResult] = await conn.query(
-      'UPDATE PatientAdmission SET DischargeDate = NOW(), Status = "Discharged", DischargeRemarks = ? ' +
+      'UPDATE patientAdmission SET DischargeDate = NOW(), Status = "Discharged", DischargeRemarks = ? ' +
       'WHERE AdmissionID = ? AND Status = "Admitted"',
       [dischargeRemarks || '', admissionId]
     );

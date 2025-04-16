@@ -61,6 +61,7 @@ export class AppointmentListComponent implements OnInit {
   viewAppointmentDialog: boolean = false;
   selectedAppointment: any = null;
   patientId: any = null;
+  doctorId: any = null;
 
   constructor(
     private appointmentService: AppointmentService,
@@ -75,8 +76,8 @@ export class AppointmentListComponent implements OnInit {
         console.log(data);
         if(data && data.role == 'Patient') {
           this.patientId = data.patientId;
-        } else {
-          this.loadAppointments();
+        } else if (data && data.role == 'Doctor'){
+          this.doctorId = data.doctorId;
         }
       },
       error: () => {
@@ -97,6 +98,8 @@ export class AppointmentListComponent implements OnInit {
         next: (data) => {
           if (this.patientId && this.patientId > 0) {
             this.appointments = data.filter((e: any) => e.PatientID == this.patientId);
+          } else if(this.doctorId && this.doctorId > 0){
+            this.appointments = data.filter((e: any) => e.DoctorID == this.doctorId);
           } else {
             this.appointments = data;
           }

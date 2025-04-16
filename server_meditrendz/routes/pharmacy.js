@@ -36,34 +36,70 @@ router.get('/medicines/:id', async (req, res) => {
 });
 
 // Add new medicine
+// router.post('/medicines', async (req, res) => {
+//   const { 
+//     name, category, description, dosageForm, unitOfMeasure, 
+//     genericName, manufacturer, isControlled 
+//   } = req.body;
+  
+//   if (!name || !category || !dosageForm || !unitOfMeasure) {
+//     return res.status(400).json({ success: false, message: 'Required fields are missing' });
+//   }
+  
+//   try {
+//     const [result] = await db.query(
+//       'INSERT INTO Medicine (Name, Category, Description, DosageForm, UnitOfMeasure, GenericName, Manufacturer, IsControlled) ' +
+//       'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+//       [
+//         name, category, description, dosageForm, unitOfMeasure, 
+//         genericName, manufacturer, isControlled ? 1 : 0
+//       ]
+//     );
+    
+//     res.status(201).json({
+//       success: true,
+//       message: 'Medicine added successfully',
+//       medicineId: result.insertId
+//     });
+//   } catch (error) {
+//     console.error('Error adding medicine:', error);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   }
+// });
+
 router.post('/medicines', async (req, res) => {
-  const { 
-    name, category, description, dosageForm, unitOfMeasure, 
-    genericName, manufacturer, isControlled 
-  } = req.body;
+  const { name, category, description, dosageForm, unitOfMeasure, genericName, manufacturer, isControlled } = req.body;
   
   if (!name || !category || !dosageForm || !unitOfMeasure) {
     return res.status(400).json({ success: false, message: 'Required fields are missing' });
   }
   
   try {
+    // Call the function to add the medicine
     const [result] = await db.query(
-      'INSERT INTO Medicine (Name, Category, Description, DosageForm, UnitOfMeasure, GenericName, Manufacturer, IsControlled) ' +
-      'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [
-        name, category, description, dosageForm, unitOfMeasure, 
-        genericName, manufacturer, isControlled ? 1 : 0
-      ]
+      'SELECT AddMedicineFunction(?, ?, ?, ?, ?, ?, ?, ?) AS medicineId',
+      [name, category, description || null, dosageForm, unitOfMeasure, genericName || null, manufacturer || null, isControlled ? 1 : 0]
     );
     
-    res.status(201).json({
-      success: true,
-      message: 'Medicine added successfully',
-      medicineId: result.insertId
-    });
+    // Check if we got a valid medicine ID back
+    const medicineId = result[0].medicineId;
+    
+    if (medicineId > 0) {
+      res.status(201).json({
+        success: true,
+        message: 'Medicine added successfully',
+        medicineId: medicineId
+      });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to add medicine' });
+    }
   } catch (error) {
     console.error('Error adding medicine:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error', 
+      error: error.message 
+    });
   }
 });
 

@@ -20,6 +20,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/department', async (req, res) => {
+  try {
+    console.log('depr');
+    const [rows] = await db.query('SELECT * FROM Department ORDER BY Name');
+    
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    console.error('Error fetching departments:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // Get doctor by ID
 router.get('/:id', async (req, res) => {
   try {
@@ -55,58 +67,108 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create a new doctor (admin only)
+// router.post('/', async (req, res) => {
+//   const { 
+//     email, password, firstName, lastName, specialization, 
+//     licenseNumber, departmentId, consultationFee, qualification, phoneNumber 
+//   } = req.body;
+  
+//   // Validate input
+//   if (!email || !password || !firstName || !lastName || !specialization || 
+//       !licenseNumber || !departmentId || !consultationFee || !qualification) {
+//     return res.status(400).json({ success: false, message: 'Required fields are missing' });
+//   }
+  
+//   const conn = await db.getConnection();
+//   await conn.beginTransaction();
+  
+//   try {
+//     // Check if user already exists
+//     const [existingUsers] = await conn.query('SELECT * FROM User WHERE Email = ?', [email]);
+    
+//     if (existingUsers.length > 0) {
+//       await conn.rollback();
+//       return res.status(400).json({ success: false, message: 'User with this email already exists' });
+//     }
+    
+//     // Insert user
+//     const [userResult] = await conn.query(
+//       'INSERT INTO User (Email, Password, FirstName, LastName, PhoneNumber, Role) VALUES (?, ?, ?, ?, ?, ?)',
+//       [email, password, firstName, lastName, phoneNumber, 'Doctor']
+//     );
+    
+//     const userId = userResult.insertId;
+    
+//     // Insert doctor
+//     const [doctorResult] = await conn.query(
+//       'INSERT INTO Doctor (UserID, Specialization, LicenseNumber, DepartmentID, Qualification, ConsultationFee) ' +
+//       'VALUES (?, ?, ?, ?, ?, ?)',
+//       [userId, specialization, licenseNumber, departmentId, qualification, consultationFee]
+//     );
+    
+//     await conn.commit();
+    
+//     res.status(201).json({
+//       success: true,
+//       message: 'Doctor created successfully',
+//       doctorId: doctorResult.insertId
+//     });
+//   } catch (error) {
+//     await conn.rollback();
+//     console.error('Error creating doctor:', error);
+//     res.status(500).json({ success: false, message: 'Server error' });
+//   } finally {
+//     conn.release();
+//   }
+// });
+
 router.post('/', async (req, res) => {
   const { 
-    email, password, firstName, lastName, specialization, 
-    licenseNumber, departmentId, consultationFee, qualification, phoneNumber 
+    email, password, firstName, lastName, phoneNumber, specialization, 
+    licenseNumber, departmentId, consultationFee, qualification 
   } = req.body;
   
   // Validate input
   if (!email || !password || !firstName || !lastName || !specialization || 
-      !licenseNumber || !departmentId || !consultationFee || !qualification) {
+      !licenseNumber || !departmentId || !consultationFee) {
     return res.status(400).json({ success: false, message: 'Required fields are missing' });
   }
   
-  const conn = await db.getConnection();
-  await conn.beginTransaction();
-  
   try {
     // Check if user already exists
-    const [existingUsers] = await conn.query('SELECT * FROM User WHERE Email = ?', [email]);
+    const [existingUsers] = await db.query('SELECT * FROM User WHERE Email = ?', [email]);
     
     if (existingUsers.length > 0) {
-      await conn.rollback();
       return res.status(400).json({ success: false, message: 'User with this email already exists' });
     }
     
-    // Insert user
-    const [userResult] = await conn.query(
-      'INSERT INTO User (Email, Password, FirstName, LastName, PhoneNumber, Role) VALUES (?, ?, ?, ?, ?, ?)',
-      [email, password, firstName, lastName, phoneNumber, 'Doctor']
+    // Call the function to register the doctor
+    const [result] = await db.query(
+      'SELECT registerDoctorFunction(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS doctorId',
+      [
+        email, password, firstName, lastName, phoneNumber || null, 
+        specialization, licenseNumber, departmentId, consultationFee,
+        qualification || null
+      ]
     );
     
-    const userId = userResult.insertId;
+    const doctorId = result[0].doctorId;
     
-    // Insert doctor
-    const [doctorResult] = await conn.query(
-      'INSERT INTO Doctor (UserID, Specialization, LicenseNumber, DepartmentID, Qualification, ConsultationFee) ' +
-      'VALUES (?, ?, ?, ?, ?, ?)',
-      [userId, specialization, licenseNumber, departmentId, qualification, consultationFee]
-    );
-    
-    await conn.commit();
-    
-    res.status(201).json({
-      success: true,
-      message: 'Doctor created successfully',
-      doctorId: doctorResult.insertId
-    });
+    if (doctorId > 0) {
+      res.status(201).json({
+        success: true,
+        message: 'Doctor registered successfully',
+        doctorId: doctorId
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Failed to register doctor'
+      });
+    }
   } catch (error) {
-    await conn.rollback();
-    console.error('Error creating doctor:', error);
+    console.error('Error registering doctor:', error);
     res.status(500).json({ success: false, message: 'Server error' });
-  } finally {
-    conn.release();
   }
 });
 

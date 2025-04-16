@@ -1,0 +1,66 @@
+<p-toast></p-toast>
+
+<div class="card">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>Add New Medicine</h2>
+    <button pButton pRipple icon="pi pi-arrow-left" label="Back" class="p-button-outlined" (click)="cancel()"></button>
+  </div>
+  
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <p-card header="Medicine Information">
+        <div class="field mb-4">
+          <label for="name" class="block text-900 font-medium mb-2">Medicine Name*</label>
+          <input id="name" type="text" pInputText class="w-full" [(ngModel)]="medicine.name">
+        </div>
+        
+        <div class="field mb-4">
+          <label for="category" class="block text-900 font-medium mb-2">Category*</label>
+          <p-select id="category" [options]="categoryOptions" [(ngModel)]="medicine.category" 
+                      placeholder="Select Category" [showClear]="true" styleClass="w-full"></p-select>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="genericName" class="block text-900 font-medium mb-2">Generic Name</label>
+          <input id="genericName" type="text" pInputText class="w-full" [(ngModel)]="medicine.genericName">
+        </div>
+        
+        <div class="field mb-4">
+          <label for="manufacturer" class="block text-900 font-medium mb-2">Manufacturer</label>
+          <input id="manufacturer" type="text" pInputText class="w-full" [(ngModel)]="medicine.manufacturer">
+        </div>
+      </p-card>
+    </div>
+    
+    <div class="col-12 md:col-6">
+      <p-card header="Dosage Information">
+        <div class="field mb-4">
+          <label for="dosageForm" class="block text-900 font-medium mb-2">Dosage Form*</label>
+          <p-select id="dosageForm" [options]="dosageFormOptions" [(ngModel)]="medicine.dosageForm" 
+                      placeholder="Select Dosage Form" [showClear]="true" styleClass="w-full"></p-select>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="unitOfMeasure" class="block text-900 font-medium mb-2">Unit of Measure*</label>
+          <p-select id="unitOfMeasure" [options]="unitOptions" [(ngModel)]="medicine.unitOfMeasure" 
+                      placeholder="Select Unit" [showClear]="true" styleClass="w-full"></p-select>
+        </div>
+        
+        <div class="field mb-4">
+          <label for="description" class="block text-900 font-medium mb-2">Description</label>
+          <textarea id="description" pTextarea [(ngModel)]="medicine.description" rows="3" class="w-full"></textarea>
+        </div>
+        
+        <div class="field mb-4 flex align-items-center">
+          <p-checkbox [(ngModel)]="medicine.isControlled" [binary]="true" inputId="isControlled"></p-checkbox>
+          <label for="isControlled" class="ml-2">This is a controlled substance</label>
+        </div>
+      </p-card>
+    </div>
+  </div>
+  
+  <div class="flex justify-content-end gap-2 mt-4">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" (click)="cancel()"></button>
+    <button pButton pRipple label="Add Medicine" icon="pi pi-check" [loading]="loading" (click)="submitForm()"></button>
+  </div>
+</div>

@@ -75,6 +75,16 @@ export class PharmacyService {
       );
   }
 
+  addMedicine(medicineData: any): Observable<any> {
+    return this.http.post(`${API_URL}/pharmacy/medicines`, medicineData)
+      .pipe(
+        catchError(error => {
+          console.error('Error adding medicine:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
   // Get all prescriptions
   getPrescriptions(): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/prescriptions`)
@@ -108,6 +118,8 @@ export class PharmacyService {
         })
       );
   }
+
+  
 
   // Create new prescription
   createPrescription(prescriptionData: any): Observable<any> {

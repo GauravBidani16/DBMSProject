@@ -45,4 +45,30 @@ export class DoctorService {
         })
       );
   }
+
+  getDepartments(): Observable<any> {
+    return this.http.get(`${API_URL}/doctors/department`)
+      .pipe(
+        map((response: any) => {
+          if (response && response.success) {
+            return response.data;
+          }
+          return [];
+        }),
+        catchError(error => {
+          console.error('Error fetching departments:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  registerDoctor(doctorData: any): Observable<any> {
+    return this.http.post(`${API_URL}/doctors`, doctorData)
+      .pipe(
+        catchError(error => {
+          console.error('Error registering doctor:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

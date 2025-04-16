@@ -9,11 +9,11 @@ import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { TooltipModule } from 'primeng/tooltip'; // Added this
+import { SelectModule } from 'primeng/select';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { BedService } from '../../../core/services/bed.service';
 import { PatientService } from '../../../core/services/patient.service';
@@ -32,7 +32,7 @@ import { TextareaModule } from 'primeng/textarea';
     CardModule,
     ButtonModule,
     DialogModule,
-    DropdownModule,
+    SelectModule,
     InputTextModule,
     TextareaModule,
     ToastModule,
@@ -158,7 +158,12 @@ export class BedDashboardComponent implements OnInit {
     this.patientService.getAllPatients()
       .subscribe({
         next: (data) => {
-          this.patients = data;
+          this.patients = data.map((e: any) => {
+            return {
+              ...e,
+              patientName: e.FirstName + " " + e.LastName
+            }
+          });
         },
         error: (error) => {
           console.error('Error loading patients:', error);
@@ -170,7 +175,12 @@ export class BedDashboardComponent implements OnInit {
     this.doctorService.getDoctors()
       .subscribe({
         next: (data) => {
-          this.doctors = data;
+          this.doctors = data.map((e: any) => {
+            return {
+              ...e,
+              doctorName: e.FirstName + " " + e.LastName
+            }
+          });;
         },
         error: (error) => {
           console.error('Error loading doctors:', error);

@@ -9,7 +9,6 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
@@ -17,6 +16,7 @@ import { VitalsService } from '../../../core/services/vitals.service';
 import { PatientService } from '../../../core/services/patient.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-vitals-add',
@@ -28,7 +28,7 @@ import { TextareaModule } from 'primeng/textarea';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
-    DropdownModule,
+    SelectModule,
     TextareaModule,
     ToastModule
   ],
@@ -80,7 +80,12 @@ export class VitalsAddComponent implements OnInit {
     this.patientService.getAllPatients()
       .subscribe({
         next: (data) => {
-          this.patients = data;
+          this.patients = data.map((e: any) => {
+            return {
+              ...e,
+              patientName: e.FirstName + " " + e.LastName
+            }
+          });
         },
         error: (error) => {
           console.error('Error loading patients:', error);

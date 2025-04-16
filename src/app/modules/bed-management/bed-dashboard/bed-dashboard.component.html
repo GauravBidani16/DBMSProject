@@ -101,17 +101,17 @@
 <p-dialog [(visible)]="admitDialog" [style]="{width: '500px'}" header="Admit Patient" [modal]="true" styleClass="p-fluid">
   <div class="field mb-4">
     <label for="patient" class="font-medium mb-2 block">Patient*</label>
-    <p-dropdown id="patient" [options]="patients" [(ngModel)]="newAdmission.patientId" placeholder="Select Patient" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+    <p-select id="patient" [options]="patients" optionLabel="patientName" optionValue="PatientID" [(ngModel)]="newAdmission.patientId" placeholder="Select Patient" [filter]="true" [showClear]="true" styleClass="w-full"></p-select>
   </div>
   
   <div class="field mb-4">
     <label for="doctor" class="font-medium mb-2 block">Admitting Doctor*</label>
-    <p-dropdown id="doctor" [options]="doctors" [(ngModel)]="newAdmission.doctorId" placeholder="Select Doctor" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+    <p-select id="doctor" [options]="doctors" optionLabel="doctorName" optionValue="DoctorID" [(ngModel)]="newAdmission.doctorId" placeholder="Select Doctor" [filter]="true" [showClear]="true" styleClass="w-full"></p-select>
   </div>
   
   <div class="field mb-4">
     <label for="bed" class="font-medium mb-2 block">Bed*</label>
-    <p-dropdown id="bed" [options]="availableBedsOptions" [(ngModel)]="newAdmission.bedId" placeholder="Select Bed" [filter]="true" [showClear]="true" styleClass="w-full"></p-dropdown>
+    <p-select id="bed" [options]="availableBedsOptions" [(ngModel)]="newAdmission.bedId" placeholder="Select Bed" [filter]="true" [showClear]="true" styleClass="w-full"></p-select>
   </div>
   
   <div class="field mb-4">

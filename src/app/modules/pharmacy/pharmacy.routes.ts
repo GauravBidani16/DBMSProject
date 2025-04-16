@@ -2,6 +2,7 @@
 import { Routes } from '@angular/router';
 import { PharmacyDashboardComponent } from './pharmacy-dashboard/pharmacy-dashboard.component';
 import { InventoryAddComponent } from './inventory-add/inventory-add.component';
+import { MedicineAddComponent } from './medicine-add/medicine-add.component';
 
 export const PHARMACY_ROUTES: Routes = [
   {
@@ -11,5 +12,9 @@ export const PHARMACY_ROUTES: Routes = [
   {
     path: 'inventory/add',
     component: InventoryAddComponent
+  },
+  {
+    path: 'medicines/add',
+    component: MedicineAddComponent
   }
 ];

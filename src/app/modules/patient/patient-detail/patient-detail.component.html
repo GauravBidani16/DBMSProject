@@ -145,7 +145,7 @@
           </ng-template>
           <ng-template pTemplate="body" let-vital>
             <tr>
-              <td>{{ vital.RecordedAt | date:'medium' }}</td>
+              <td>{{ vital.recordedAt | date:'medium' }}</td>
               <td>{{ vital.heartRate ? vital.heartRate + ' bpm' : '-' }}</td>
               <td>
                 <span *ngIf="vital.bloodPressure">

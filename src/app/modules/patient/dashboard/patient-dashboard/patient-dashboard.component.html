@@ -29,7 +29,7 @@
         <div *ngIf="getNextAppointment()" class="text-900 text-lg">
           <div>{{ getNextAppointment().AppointmentDate | date:'mediumDate' }}</div>
           <div>{{ getNextAppointment().StartTime }}</div>
-          <div>With: {{ getNextAppointment().DoctorName }}</div>
+          <div>With: Dr. {{ getNextAppointment().DoctorName }}</div>
         </div>
         <div *ngIf="!getNextAppointment()" class="text-900 text-lg">
           <div>No upcoming appointments</div>
