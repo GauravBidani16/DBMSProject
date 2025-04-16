@@ -1,4 +1,3 @@
-// src/app/core/services/appointment.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -13,7 +12,6 @@ export class AppointmentService {
 
   constructor(private http: HttpClient) { }
 
-  // Get all appointments
   getAppointments(): Observable<any> {
     return this.http.get(`${API_URL}/appointments`)
       .pipe(
@@ -30,7 +28,6 @@ export class AppointmentService {
       );
   }
 
-  // Get appointment by ID
   getAppointmentById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/appointments/${id}`)
       .pipe(
@@ -47,12 +44,27 @@ export class AppointmentService {
       );
   }
 
-  // Create new appointment
   createAppointment(appointmentData: any): Observable<any> {
     return this.http.post(`${API_URL}/appointments`, appointmentData)
       .pipe(
         catchError(error => {
           console.error('Error creating appointment:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getDoctorAppointments(doctorId: number): Observable<any> {
+    return this.http.get(`${API_URL}/appointments/doctor/${doctorId}`)
+      .pipe(
+        map((response: any) => {
+          if (response && response.success) {
+            return response.data;
+          }
+          return [];
+        }),
+        catchError(error => {
+          console.error(`Error fetching appointments for doctor ${doctorId}:`, error);
           return throwError(() => error);
         })
       );

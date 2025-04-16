@@ -10,7 +10,11 @@
     </ng-template>
   </p-menubar>
   
-  <div class="flex-grow-1 p-4">
-    <router-outlet></router-outlet>
+  <div class="grid">
+    <div class="lg:col-8 lg:col-offset-2 md:col-12 md:col-offset-0">
+      <div class="max-w-full">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,35 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-// PrimeNG Imports
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 import { DoctorService } from '../../../core/services/doctor.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { TextareaModule } from 'primeng/textarea';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-doctor-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    TextareaModule,
-    DropdownModule,
-    InputNumberModule,
-    ToastModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './doctor-register.component.html',
   styleUrl: './doctor-register.component.scss'
 })

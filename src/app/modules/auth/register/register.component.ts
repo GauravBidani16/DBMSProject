@@ -1,37 +1,16 @@
-// src/app/modules/auth/register/register.component.ts
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-// PrimeNG Imports
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
-import { ToastModule } from 'primeng/toast';
+
 import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../../../core/services/auth.service';
-import { TextareaModule } from 'primeng/textarea';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CardModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    DropdownModule,
-    CalendarModule,
-    ToastModule,
-    TextareaModule 
-  ],
+  imports: PrimeNgImports,
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })

@@ -1,37 +1,17 @@
-// src/app/modules/vitals/vitals-add/vitals-add.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-// PrimeNG Imports
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-
 import { VitalsService } from '../../../core/services/vitals.service';
 import { PatientService } from '../../../core/services/patient.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { TextareaModule } from 'primeng/textarea';
-import { SelectModule } from 'primeng/select';
+
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-vitals-add',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    InputNumberModule,
-    SelectModule,
-    TextareaModule,
-    ToastModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './vitals-add.component.html',
   styleUrl: './vitals-add.component.scss'
 })
@@ -65,7 +45,6 @@ export class VitalsAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if patient ID is passed in the route
     this.route.queryParams.subscribe(params => {
       if (params['patientId']) {
         this.vitalsData.patientId = +params['patientId'];
@@ -111,14 +90,12 @@ export class VitalsAddComponent implements OnInit {
   }
 
   submitForm() {
-    // Validate the form
     if (!this.validateForm()) {
       return;
     }
 
     this.loading = true;
 
-    // Add current user ID as recorded by
     const formData = {
       ...this.vitalsData,
       recordedBy: this.currentUser.id
@@ -134,7 +111,6 @@ export class VitalsAddComponent implements OnInit {
             detail: 'Vitals recorded successfully'
           });
           
-          // Navigate back after a short delay
           setTimeout(() => {
             if (this.vitalsData.patientId) {
               this.router.navigate(['/patient', this.vitalsData.patientId]);
@@ -164,7 +140,6 @@ export class VitalsAddComponent implements OnInit {
       return false;
     }
 
-    // Require at least one vital sign
     if (!this.vitalsData.heartRate && 
         !(this.vitalsData.bloodPressure.systolic && this.vitalsData.bloodPressure.diastolic) && 
         !this.vitalsData.temperature && 
@@ -177,7 +152,6 @@ export class VitalsAddComponent implements OnInit {
       return false;
     }
 
-    // Validate heart rate if provided
     if (this.vitalsData.heartRate && (this.vitalsData.heartRate < 30 || this.vitalsData.heartRate > 220)) {
       this.messageService.add({
         severity: 'error',
@@ -187,7 +161,6 @@ export class VitalsAddComponent implements OnInit {
       return false;
     }
 
-    // Validate blood pressure if provided
     if (this.vitalsData.bloodPressure.systolic && !this.vitalsData.bloodPressure.diastolic) {
       this.messageService.add({
         severity: 'error',
@@ -226,7 +199,6 @@ export class VitalsAddComponent implements OnInit {
       return false;
     }
 
-    // Validate temperature if provided
     if (this.vitalsData.temperature && (this.vitalsData.temperature < 32 || this.vitalsData.temperature > 45)) {
       this.messageService.add({
         severity: 'error',
@@ -236,7 +208,6 @@ export class VitalsAddComponent implements OnInit {
       return false;
     }
 
-    // Validate oxygen saturation if provided
     if (this.vitalsData.oxygenSaturation && 
         (this.vitalsData.oxygenSaturation < 50 || this.vitalsData.oxygenSaturation > 100)) {
       this.messageService.add({

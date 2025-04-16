@@ -1,36 +1,17 @@
-// src/app/modules/patient/patient-edit/patient-edit.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-// PrimeNG Imports
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
-import { ToastModule } from 'primeng/toast';
+
 import { MessageService } from 'primeng/api';
 
 import { PatientService } from '../../../core/services/patient.service';
-import { TextareaModule } from 'primeng/textarea';
 import { AuthService } from '../../../core/services/auth.service';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-patient-edit',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    TextareaModule,
-    CalendarModule,
-    ToastModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './patient-edit.component.html',
   styleUrl: './patient-edit.component.scss'
 })

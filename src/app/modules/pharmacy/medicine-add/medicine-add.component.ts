@@ -1,37 +1,15 @@
-// src/app/modules/pharmacy/medicine-add/medicine-add.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-// PrimeNG Imports
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-
 import { PharmacyService } from '../../../core/services/pharmacy.service';
-import { TextareaModule } from 'primeng/textarea';
-import { SelectModule } from 'primeng/select';
+
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-medicine-add',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    TextareaModule,
-    SelectModule,
-    InputNumberModule,
-    CheckboxModule,
-    ToastModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './medicine-add.component.html',
   styleUrl: './medicine-add.component.scss'
 })
@@ -98,7 +76,6 @@ export class MedicineAddComponent implements OnInit {
   ngOnInit(): void {}
 
   submitForm() {
-    // Validate form
     if (!this.validateForm()) {
       return;
     }
@@ -115,7 +92,6 @@ export class MedicineAddComponent implements OnInit {
             detail: 'Medicine added successfully'
           });
           
-          // Navigate back to pharmacy dashboard after a short delay
           setTimeout(() => {
             this.router.navigate(['/pharmacy']);
           }, 1500);

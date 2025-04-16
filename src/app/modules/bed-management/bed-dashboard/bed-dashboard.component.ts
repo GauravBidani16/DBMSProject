@@ -1,43 +1,18 @@
-// src/app/modules/bed-management/bed-dashboard/bed-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
-// PrimeNG Imports
-import { TableModule } from 'primeng/table';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { SelectModule } from 'primeng/select';
-import { TooltipModule } from 'primeng/tooltip';
 
 import { BedService } from '../../../core/services/bed.service';
 import { PatientService } from '../../../core/services/patient.service';
 import { DoctorService } from '../../../core/services/doctor.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { TextareaModule } from 'primeng/textarea';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-bed-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    TableModule,
-    CardModule,
-    ButtonModule,
-    DialogModule,
-    SelectModule,
-    InputTextModule,
-    TextareaModule,
-    ToastModule,
-    TooltipModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './bed-dashboard.component.html',
   styleUrl: './bed-dashboard.component.scss'
 })

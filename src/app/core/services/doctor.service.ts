@@ -1,4 +1,3 @@
-// src/app/core/services/doctor.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -29,7 +28,6 @@ export class DoctorService {
       );
   }
 
-  // Get doctor by ID
   getDoctorById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/doctors/${id}`)
       .pipe(
@@ -67,6 +65,22 @@ export class DoctorService {
       .pipe(
         catchError(error => {
           console.error('Error registering doctor:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  getDoctorPatients(doctorId: number): Observable<any> {
+    return this.http.get(`${API_URL}/doctors/${doctorId}/patients`)
+      .pipe(
+        map((response: any) => {
+          if (response && response.success) {
+            return response.data;
+          }
+          return [];
+        }),
+        catchError(error => {
+          console.error(`Error fetching patients for doctor ${doctorId}:`, error);
           return throwError(() => error);
         })
       );

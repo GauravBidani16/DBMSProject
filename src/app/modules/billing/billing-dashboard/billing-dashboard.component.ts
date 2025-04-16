@@ -1,36 +1,14 @@
-// src/app/modules/billing/billing-dashboard/billing-dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 
-// PrimeNG Imports
-import { TableModule } from 'primeng/table';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { DropdownModule } from 'primeng/dropdown';
-import { TagModule } from 'primeng/tag';
 
 import { BillingService } from '../../../core/services/billing.service';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-billing-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    TableModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    ToastModule,
-    DropdownModule,
-    TagModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './billing-dashboard.component.html',
   styleUrl: './billing-dashboard.component.scss'
 })
@@ -82,12 +60,10 @@ export class BillingDashboardComponent implements OnInit {
 
   applyFilters() {
     this.filteredBills = this.bills.filter(bill => {
-      // Status filter
       if (this.selectedStatus && bill.Status !== this.selectedStatus) {
         return false;
       }
       
-      // Search filter
       if (this.searchText) {
         const searchLower = this.searchText.toLowerCase();
         return bill.PatientName.toLowerCase().includes(searchLower) ||
@@ -132,8 +108,6 @@ export class BillingDashboardComponent implements OnInit {
         if (bill.Status === 'Paid') {
           return total + bill.TotalAmount;
         } else {
-          // For partially paid bills, we'd need actual payment data
-          // This is a simplification
           return total + (bill.TotalAmount * 0.5);
         }
       }, 0);

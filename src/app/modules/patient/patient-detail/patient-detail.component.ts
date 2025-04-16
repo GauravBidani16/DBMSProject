@@ -1,34 +1,17 @@
-// src/app/modules/patient/patient-detail/patient-detail.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-// PrimeNG Imports
-import { TabViewModule } from 'primeng/tabview';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { TagModule } from 'primeng/tag';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 import { PatientService } from '../../../core/services/patient.service';
 import { VitalsService } from '../../../core/services/vitals.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-patient-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TabViewModule,
-    CardModule,
-    ButtonModule,
-    TableModule,
-    TagModule,
-    ToastModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './patient-detail.component.html',
   styleUrl: './patient-detail.component.scss'
 })

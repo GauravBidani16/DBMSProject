@@ -1,72 +1,74 @@
-<!-- src/app/modules/doctor/dashboard/doctor-dashboard.component.html -->
+<p-toast></p-toast>
+
 <div class="grid">
-  <div class="col-12">
-    <h1>Doctor Dashboard</h1>
-    <p>Welcome back</p>
-  </div>
-  
-  <div class="col-12 md:col-6 lg:col-3">
+  <div class="col-12 lg:col-4">
     <p-card styleClass="h-full">
-      <div class="text-center">
-        <i class="pi pi-calendar-plus text-4xl text-primary mb-3"></i>
-        <div class="text-900 font-medium text-xl mb-2">Today's Appointments</div>
-        <div class="text-900 font-bold text-5xl">5</div>
-      </div>
-    </p-card>
-  </div>
-  
-  <div class="col-12 md:col-6 lg:col-3">
-    <p-card styleClass="h-full">
-      <div class="text-center">
-        <i class="pi pi-users text-4xl text-primary mb-3"></i>
-        <div class="text-900 font-medium text-xl mb-2">My Patients</div>
-        <div class="text-900 font-bold text-5xl">42</div>
-      </div>
-    </p-card>
-  </div>
-  
-  <div class="col-12 md:col-6 lg:col-3">
-    <p-card styleClass="h-full">
-      <div class="text-center">
-        <i class="pi pi-clipboard text-4xl text-primary mb-3"></i>
-        <div class="text-900 font-medium text-xl mb-2">Pending Reports</div>
-        <div class="text-900 font-bold text-5xl">7</div>
-      </div>
-    </p-card>
-  </div>
-  
-  <div class="col-12 md:col-6 lg:col-3">
-    <p-card styleClass="h-full">
-      <div class="text-center">
-        <i class="pi pi-bell text-4xl text-primary mb-3"></i>
-        <div class="text-900 font-medium text-xl mb-2">Notifications</div>
-        <div class="text-900 font-bold text-5xl">3</div>
+      <div *ngIf="!loading && doctorInfo" class="flex flex-column align-items-center">
+        <i class="pi pi-user-doctor text-6xl text-primary mb-3"></i>
+        <h2 class="m-0">Dr. {{ doctorInfo.FirstName }} {{ doctorInfo.LastName }}</h2>
+        <p class="text-lg text-600 mb-3">{{ doctorInfo.Specialization }}</p>
+        
+        <div class="w-full">
+          <div class="flex justify-content-between border-bottom-1 surface-border py-2">
+            <span class="font-medium">Department:</span>
+            <span>{{ doctorInfo.Department }}</span>
+          </div>
+          <div class="flex justify-content-between border-bottom-1 surface-border py-2">
+            <span class="font-medium">License Number:</span>
+            <span>{{ doctorInfo.LicenseNumber }}</span>
+          </div>
+          <div class="flex justify-content-between border-bottom-1 surface-border py-2">
+            <span class="font-medium">Consultation Fee:</span>
+            <span>${{ doctorInfo.ConsultationFee }}</span>
+          </div>
+          <div class="flex justify-content-between border-bottom-1 surface-border py-2">
+            <span class="font-medium">Email:</span>
+            <span>{{ doctorInfo.Email }}</span>
+          </div>
+          <div class="flex justify-content-between py-2">
+            <span class="font-medium">Phone:</span>
+            <span>{{ doctorInfo.PhoneNumber }}</span>
+          </div>
+        </div>
+        
+        <div class="flex justify-content-center mt-4">
+          <button pButton pRipple label="Schedule Appointment" icon="pi pi-calendar-plus" class="p-button-outlined" routerLink="/appointment/create"></button>
+        </div>
       </div>
     </p-card>
   </div>
   
   <div class="col-12 lg:col-8">
-    <p-card header="Today's Appointments" styleClass="h-full">
-      <p-table [value]="todayAppointments" [paginator]="true" [rows]="5" styleClass="p-datatable-sm">
+    <p-card header="Today's Appointments">
+      <p-table [value]="todayAppointments" styleClass="p-datatable-sm" [paginator]="true" [rows]="5" [loading]="loading">
         <ng-template pTemplate="header">
           <tr>
             <th>Patient</th>
             <th>Time</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-appointment>
           <tr>
-            <td>{{ appointment.patientName }}</td>
-            <td>{{ appointment.time }}</td>
-            <td>{{ appointment.type }}</td>
+            <td>{{ appointment.PatientName }}</td>
+            <td>{{ appointment.StartTime }} - {{ appointment.EndTime }}</td>
+            <td>{{ appointment.AppointmentType }}</td>
+            <td><p-tag [value]="appointment.Status" [severity]="getSeverity(appointment.Status)"></p-tag></td>
             <td>
-              <p-tag [value]="appointment.status" severity="success"></p-tag>
+              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text"
+                      [routerLink]="['/appointment', appointment.AppointmentID]"></button>
+              <button *ngIf="appointment.Status === 'Scheduled'" pButton pRipple icon="pi pi-check" 
+                      class="p-button-rounded p-button-success p-button-text"
+                      [routerLink]="['/appointment', appointment.AppointmentID]"></button>
             </td>
-            <td>
-              <button pButton pRipple type="button" label="View" class="p-button-sm p-button-outlined"></button>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center p-4">
+              No appointments scheduled for today.
             </td>
           </tr>
         </ng-template>
@@ -74,45 +76,76 @@
     </p-card>
   </div>
   
-  <div class="col-12 lg:col-4">
-    <p-card header="Recent Patients" styleClass="h-full">
-      <ul class="list-none p-0 m-0">
-        <li *ngFor="let patient of recentPatients" class="flex align-items-center py-2 border-bottom-1 surface-border">
-          <div class="flex-grow-1">
-            <div class="font-medium text-900">{{ patient.name }}</div>
-            <div class="text-500">{{ patient.age }} years • {{ patient.condition }}</div>
-          </div>
-          <button pButton pRipple type="button" icon="pi pi-file" class="p-button-text p-button-rounded" title="View Records"></button>
-        </li>
-      </ul>
+  <div class="col-12 lg:col-6">
+    <p-card header="My Patients" [subheader]="'Recent patients (' + myPatients.length + ')'">
+      <p-table [value]="myPatients" styleClass="p-datatable-sm" [loading]="loading">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Patient</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Last Visit</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-patient>
+          <tr>
+            <td>{{ patient.FirstName }} {{ patient.LastName }}</td>
+            <td>{{ patient.Gender }}</td>
+            <td>{{ patient.Age }} years</td>
+            <td>{{ patient.LastVisit | date:'mediumDate' }}</td>
+            <td>
+              <button pButton pRipple icon="pi pi-user" class="p-button-rounded p-button-text"
+                      [routerLink]="['/patient', patient.PatientID]"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center p-4">
+              No patients found.
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
       <div class="flex justify-content-end mt-3">
-        <button pButton pRipple type="button" label="View All Patients" class="p-button-text"></button>
+        <button pButton pRipple label="View All Patients" icon="pi pi-users" 
+                class="p-button-text" routerLink="/patient"></button>
       </div>
     </p-card>
   </div>
   
-  <div class="col-12">
-    <p-card header="Patient Conditions Summary">
-      <p-table [value]="patientStatistics" styleClass="p-datatable-sm">
+  <div class="col-12 lg:col-6">
+    <p-card header="Upcoming Appointments">
+      <p-table [value]="upcomingAppointments" styleClass="p-datatable-sm" [loading]="loading">
         <ng-template pTemplate="header">
           <tr>
-            <th>Condition</th>
-            <th style="width: 25%">Patient Count</th>
-            <th style="width: 40%">Distribution</th>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-stat>
+        <ng-template pTemplate="body" let-appointment>
           <tr>
-            <td>{{ stat.condition }}</td>
-            <td>{{ stat.count }} ({{ stat.percentage }}%)</td>
-            <td>
-              <div class="w-full bg-gray-200 border-round" style="height: 20px;">
-                <div class="bg-primary border-round h-full" [style.width.%]="stat.percentage"></div>
-              </div>
+            <td>{{ appointment.PatientName }}</td>
+            <td>{{ appointment.AppointmentDate | date:'mediumDate' }}</td>
+            <td>{{ appointment.StartTime }}</td>
+            <td>{{ appointment.AppointmentType }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center p-4">
+              No upcoming appointments.
             </td>
           </tr>
         </ng-template>
       </p-table>
+      <div class="flex justify-content-end mt-3">
+        <button pButton pRipple label="View All Appointments" icon="pi pi-calendar" 
+                class="p-button-text" routerLink="/appointment"></button>
+      </div>
     </p-card>
   </div>
 </div>

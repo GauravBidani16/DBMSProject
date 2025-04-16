@@ -5,11 +5,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const doctorRoutes = require('./routes/doctors');
@@ -21,7 +19,6 @@ const vitalsRoutes = require('./routes/vitals');
 const billingRoutes = require('./routes/billing');
 const adminRoutes = require('./routes/admin');
 
-// Route middlewares
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/doctors', doctorRoutes);
@@ -33,12 +30,10 @@ app.use('/api/vitals', vitalsRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Simple test route
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the IHMS API' });
+  res.json({ message: 'Welcome to the Meditrendz api' });
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

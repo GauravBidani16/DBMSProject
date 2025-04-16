@@ -1,4 +1,3 @@
-// src/app/core/services/pharmacy.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -13,7 +12,6 @@ export class PharmacyService {
 
   constructor(private http: HttpClient) { }
 
-  // Get all medicines
   getMedicines(): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/medicines`)
       .pipe(
@@ -30,7 +28,6 @@ export class PharmacyService {
       );
   }
 
-  // Get medicine by ID
   getMedicineById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/medicines/${id}`)
       .pipe(
@@ -47,7 +44,6 @@ export class PharmacyService {
       );
   }
 
-  // Get inventory
   getInventory(): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/inventory`)
       .pipe(
@@ -64,7 +60,6 @@ export class PharmacyService {
       );
   }
 
-  // Add to inventory
   addToInventory(inventoryData: any): Observable<any> {
     return this.http.post(`${API_URL}/pharmacy/inventory`, inventoryData)
       .pipe(
@@ -85,7 +80,6 @@ export class PharmacyService {
       );
   }
 
-  // Get all prescriptions
   getPrescriptions(): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/prescriptions`)
       .pipe(
@@ -102,7 +96,6 @@ export class PharmacyService {
       );
   }
 
-  // Get prescription by ID
   getPrescriptionById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/prescriptions/${id}`)
       .pipe(
@@ -119,9 +112,6 @@ export class PharmacyService {
       );
   }
 
-  
-
-  // Create new prescription
   createPrescription(prescriptionData: any): Observable<any> {
     return this.http.post(`${API_URL}/pharmacy/prescriptions`, prescriptionData)
       .pipe(
@@ -132,7 +122,6 @@ export class PharmacyService {
       );
   }
 
-  // Dispense medication
   dispenseMedication(prescriptionDetailId: number, data: any): Observable<any> {
     return this.http.post(`${API_URL}/pharmacy/prescriptions/dispense/${prescriptionDetailId}`, data)
       .pipe(
@@ -143,7 +132,6 @@ export class PharmacyService {
       );
   }
 
-  // Get suppliers
   getSuppliers(): Observable<any> {
     return this.http.get(`${API_URL}/pharmacy/suppliers`)
       .pipe(

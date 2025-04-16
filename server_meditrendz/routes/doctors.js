@@ -65,6 +65,28 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/:id/patients', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      'SELECT DISTINCT p.PatientID, u.FirstName, u.LastName, p.Gender, p.DateOfBirth, ' +
+      'TIMESTAMPDIFF(YEAR, p.DateOfBirth, CURDATE()) AS Age, ' +
+      'MAX(a.AppointmentDate) AS LastVisit ' +
+      'FROM Patient p ' +
+      'JOIN User u ON p.UserID = u.UserID ' +
+      'JOIN Appointment a ON p.PatientID = a.PatientID ' +
+      'WHERE a.DoctorID = ? ' +
+      'GROUP BY p.PatientID ' +
+      'ORDER BY LastVisit DESC',
+      [req.params.id]
+    );
+    
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    console.error(`Error fetching patients for doctor ${req.params.id}:`, error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // Create a new doctor (admin only)
 // router.post('/', async (req, res) => {
 //   const { 

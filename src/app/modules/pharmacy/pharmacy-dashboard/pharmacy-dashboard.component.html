@@ -9,7 +9,6 @@
   </div>
   
   <div class="grid">
-    <!-- Summary Cards -->
     <div class="col-12 md:col-4">
       <p-card styleClass="h-full">
         <div class="text-center">
@@ -41,9 +40,7 @@
     </div>
   </div>
   
-  <!-- Tabs for different sections -->
   <p-tabView styleClass="mt-4">
-    <!-- Inventory Tab -->
     <p-tabPanel header="Inventory">
       <p-table [value]="inventory" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" [loading]="loading"
                [globalFilterFields]="['MedicineName', 'BatchNumber', 'SupplierName']">
@@ -87,52 +84,6 @@
       </p-table>
     </p-tabPanel>
     
-    <!-- Prescriptions Tab
-    <p-tabPanel header="Prescriptions">
-      <p-table [value]="prescriptions" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" [loading]="loading"
-               [globalFilterFields]="['PatientName', 'DoctorName']">
-        <ng-template pTemplate="caption">
-          <div class="flex justify-content-between align-items-center">
-            <h5 class="m-0">Prescriptions</h5>
-            <button pButton pRipple label="New Prescription" icon="pi pi-plus" class="p-button-sm" routerLink="/pharmacy/prescriptions/new"></button>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Patient</th>
-            <th>Doctor</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-prescription>
-          <tr>
-            <td>{{ prescription.PatientName }}</td>
-            <td>{{ prescription.DoctorName }}</td>
-            <td>{{ prescription.PrescriptionDate | date }}</td>
-            <td>
-              <span [class]="getPrescriptionStatusColor(prescription.Status)">
-                {{ prescription.Status }}
-              </span>
-            </td>
-            <td>
-              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text"
-                      [routerLink]="['/pharmacy/prescriptions', prescription.PrescriptionID]"></button>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="5" class="text-center p-4">
-              No prescriptions found.
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-tabPanel> -->
-    
-    <!-- Medicines Tab -->
     <p-tabPanel header="Medicines">
       <p-table [value]="medicines" [paginator]="true" [rows]="10" styleClass="p-datatable-sm" [loading]="loading"
                [globalFilterFields]="['Name', 'Category', 'GenericName', 'Manufacturer']">

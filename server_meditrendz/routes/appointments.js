@@ -147,4 +147,24 @@ router.get('/patient/:id', async (req, res) => {
   }
 });
 
+router.get('/doctor/:id', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      'SELECT a.*, ' +
+      'CONCAT(p_user.FirstName, " ", p_user.LastName) AS PatientName ' +
+      'FROM Appointment a ' +
+      'JOIN Patient p ON a.PatientID = p.PatientID ' +
+      'JOIN User p_user ON p.UserID = p_user.UserID ' +
+      'WHERE a.DoctorID = ? ' +
+      'ORDER BY a.AppointmentDate ASC, a.StartTime ASC',
+      [req.params.id]
+    );
+    
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    console.error(`Error fetching appointments for doctor ${req.params.id}:`, error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 module.exports = router;

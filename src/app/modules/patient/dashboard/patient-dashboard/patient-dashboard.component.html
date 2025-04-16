@@ -1,11 +1,9 @@
-<!-- src/app/modules/patient/dashboard/patient-dashboard.component.html -->
 <div class="grid" *ngIf="patientData && !loading">
   <div class="col-12">
     <h1>Welcome, {{ patientData.FirstName }}!</h1>
     <p>Here's a summary of your health information and upcoming appointments.</p>
   </div>
   
-  <!-- Personal Health Summary Card -->
   <div class="col-12 md:col-6 lg:col-3">
     <p-card styleClass="h-full">
       <div class="text-center">
@@ -20,7 +18,6 @@
     </p-card>
   </div>
   
-  <!-- Next Appointment Card -->
   <div class="col-12 md:col-6 lg:col-3">
     <p-card styleClass="h-full">
       <div class="text-center">
@@ -39,7 +36,6 @@
     </p-card>
   </div>
   
-  <!-- Latest Vitals Card -->
   <div class="col-12 md:col-6 lg:col-3">
     <p-card styleClass="h-full">
       <div class="text-center">
@@ -73,25 +69,7 @@
       </div>
     </p-card>
   </div>
-  
-  <!-- Medication Reminder Card
-  <div class="col-12 md:col-6 lg:col-3">
-    <p-card styleClass="h-full">
-      <div class="text-center">
-        <i class="pi pi-clock text-4xl text-primary mb-3"></i>
-        <div class="text-900 font-medium text-xl mb-2">Medication Reminder</div>
-        <div class="text-900 text-lg" *ngIf="recentPrescriptions.length > 0">
-          <div>{{ recentPrescriptions[0].MedicineName || 'Active Medications' }}</div>
-          <div>Take as prescribed</div>
-        </div>
-        <div class="text-900 text-lg" *ngIf="recentPrescriptions.length === 0">
-          <div>No active medications</div>
-        </div>
-      </div>
-    </p-card>
-  </div> -->
-  
-  <!-- Upcoming Appointments Table -->
+
   <div class="col-12 lg:col-8">
     <p-card header="Upcoming Appointments" styleClass="h-full">
       <p-table [value]="upcomingAppointments" styleClass="p-datatable-sm">

@@ -1,26 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AdminService } from '../../../../core/services/admin.service';
+import { PrimeNgImports } from '../../../../primengModules';
 
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    CardModule,
-    ButtonModule,
-    TableModule,
-    ToastModule,
-  ],
+  imports: PrimeNgImports,
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })

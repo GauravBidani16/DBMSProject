@@ -52,8 +52,8 @@
           </div>
           
           <div class="col-12 md:col-6 lg:col-3">
-            <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="Filter by Status" 
-                        styleClass="w-full" (onChange)="applyFilters()"></p-dropdown>
+            <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="Filter by Status" 
+                        styleClass="w-full" (onChange)="applyFilters()"></p-select>
           </div>
         </div>
         

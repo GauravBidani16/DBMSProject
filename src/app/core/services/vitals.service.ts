@@ -1,4 +1,3 @@
-// src/app/core/services/vitals.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -13,7 +12,6 @@ export class VitalsService {
 
   constructor(private http: HttpClient) { }
 
-  // Get patient vitals logs
   getPatientVitals(patientId: number): Observable<any> {
     return this.http.get(`${API_URL}/vitals/patient/${patientId}`)
       .pipe(
@@ -30,7 +28,6 @@ export class VitalsService {
       );
   }
 
-  // Add new vitals log
   addVitals(vitalsData: any): Observable<any> {
     return this.http.post(`${API_URL}/vitals`, vitalsData)
       .pipe(
@@ -41,7 +38,6 @@ export class VitalsService {
       );
   }
 
-  // Get vitals log by ID
   getVitalsById(id: number): Observable<any> {
     return this.http.get(`${API_URL}/vitals/${id}`)
       .pipe(

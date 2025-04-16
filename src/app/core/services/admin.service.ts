@@ -12,7 +12,6 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  // Get dashboard statistics
   getDashboardStats(): Observable<any> {
     return this.http.get(`${API_URL}/admin/dashboard`)
       .pipe(

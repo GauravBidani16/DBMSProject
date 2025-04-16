@@ -1,35 +1,15 @@
-// src/app/modules/pharmacy/inventory-add/inventory-add.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-// PrimeNG Imports
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-
 import { PharmacyService } from '../../../core/services/pharmacy.service';
+
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-inventory-add',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    InputNumberModule,
-    CalendarModule,
-    DropdownModule,
-    ToastModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './inventory-add.component.html',
   styleUrl: './inventory-add.component.scss'
 })

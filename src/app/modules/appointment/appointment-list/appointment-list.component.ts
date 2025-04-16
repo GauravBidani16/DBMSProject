@@ -1,36 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
-// PrimeNG Imports
-import { TableModule } from 'primeng/table';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
-import { DialogModule } from 'primeng/dialog';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { FormsModule } from '@angular/forms';
 import { AppointmentService } from '../../../core/services/appointment.service';
-import { SelectModule } from 'primeng/select';
 import { AuthService } from '../../../core/services/auth.service';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    TableModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule,
-    TagModule,
-    DialogModule,
-    ToastModule,
-    FormsModule
-  ],
+  imports: PrimeNgImports,
   providers: [MessageService],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss'

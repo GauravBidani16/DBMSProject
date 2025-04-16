@@ -1,28 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
-import { TabViewModule } from 'primeng/tabview';
 import { MessageService } from 'primeng/api';
-
 import { PharmacyService } from '../../../core/services/pharmacy.service';
+import { PrimeNgImports } from '../../../primengModules';
 
 @Component({
   selector: 'app-pharmacy-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    CardModule,
-    ButtonModule,
-    TableModule,
-    ToastModule,
-    TabViewModule
-  ],
+  imports: PrimeNgImports,
   templateUrl: './pharmacy-dashboard.component.html',
   styleUrl: './pharmacy-dashboard.component.scss'
 })
