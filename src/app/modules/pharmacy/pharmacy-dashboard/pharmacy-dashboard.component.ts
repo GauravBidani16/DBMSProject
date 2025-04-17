@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { PharmacyService } from '../../../core/services/pharmacy.service';
 import { PrimeNgImports } from '../../../primengModules';
 
@@ -8,6 +8,7 @@ import { PrimeNgImports } from '../../../primengModules';
   selector: 'app-pharmacy-dashboard',
   standalone: true,
   imports: PrimeNgImports,
+  providers: [ConfirmationService],
   templateUrl: './pharmacy-dashboard.component.html',
   styleUrl: './pharmacy-dashboard.component.scss'
 })
@@ -20,7 +21,8 @@ export class PharmacyDashboardComponent implements OnInit {
 
   constructor(
     private pharmacyService: PharmacyService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -95,5 +97,38 @@ export class PharmacyDashboardComponent implements OnInit {
       const expiryDate = new Date(item.ExpiryDate);
       return expiryDate <= threeMonthsLater && expiryDate >= today;
     });
+  }
+
+  confirmDeleteMedicine(medicine: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${medicine.Name}?`,
+      header: 'Delete Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteMedicine(medicine.MedicineID);
+      }
+    });
+  }
+
+  deleteMedicine(medicineId: number) {
+    this.pharmacyService.deleteMedicine(medicineId)
+      .subscribe({
+        next: (response) => {
+          this.medicines = this.medicines.filter(m => m.MedicineID !== medicineId);
+          
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Medicine deleted successfully'
+          });
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error?.message || 'Failed to delete medicine'
+          });
+        }
+      });
   }
 }

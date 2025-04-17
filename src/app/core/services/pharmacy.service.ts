@@ -147,4 +147,14 @@ export class PharmacyService {
         })
       );
   }
+
+  deleteMedicine(medicineId: number): Observable<any> {
+    return this.http.delete(`${API_URL}/pharmacy/medicines/${medicineId}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error deleting medicine:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 }

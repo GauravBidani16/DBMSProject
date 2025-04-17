@@ -118,4 +118,20 @@ router.get('/suppliers', async (req, res) => {
   }
 });
 
+// Delete Medicine
+router.delete('/medicines/:id', async (req, res) => {
+  try {
+    const [result] = await db.query('DELETE FROM Medicine WHERE MedicineID = ?', [req.params.id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ success: false, message: 'Medicine not found' });
+    }
+    
+    res.json({ success: true, message: 'Medicine deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting medicine:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 module.exports = router;

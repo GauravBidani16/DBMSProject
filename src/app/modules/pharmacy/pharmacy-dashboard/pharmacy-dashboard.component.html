@@ -100,6 +100,7 @@
             <th>Generic Name</th>
             <th>Dosage Form</th>
             <th>Manufacturer</th>
+            <th>Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-medicine>
@@ -109,6 +110,10 @@
             <td>{{ medicine.GenericName || 'N/A' }}</td>
             <td>{{ medicine.DosageForm }}</td>
             <td>{{ medicine.Manufacturer || 'N/A' }}</td>
+            <td>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-text" 
+              (click)="confirmDeleteMedicine(medicine)" pTooltip="Delete Medicine"></button>
+            </td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -121,4 +126,6 @@
       </p-table>
     </p-tabPanel>
   </p-tabView>
+
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 </div>
