@@ -42,7 +42,6 @@ export class DoctorRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check if current user is admin
     if (!this.currentUser || this.currentUser.role !== 'Admin') {
       this.messageService.add({
         severity: 'error',
@@ -77,7 +76,6 @@ export class DoctorRegisterComponent implements OnInit {
   }
 
   submitForm() {
-    // Validate form
     if (!this.validateForm()) {
       return;
     }
@@ -94,7 +92,6 @@ export class DoctorRegisterComponent implements OnInit {
             detail: 'Doctor registered successfully'
           });
           
-          // Navigate back to admin dashboard after a short delay
           setTimeout(() => {
             this.router.navigate(['/admin']);
           }, 1500);
@@ -111,7 +108,6 @@ export class DoctorRegisterComponent implements OnInit {
   }
 
   validateForm(): boolean {
-    // Basic validation
     if (!this.doctorData.firstName || !this.doctorData.lastName) {
       this.messageService.add({
         severity: 'error',
@@ -130,7 +126,6 @@ export class DoctorRegisterComponent implements OnInit {
       return false;
     }
 
-    // Email format validation
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailPattern.test(this.doctorData.email)) {
       this.messageService.add({
@@ -150,7 +145,6 @@ export class DoctorRegisterComponent implements OnInit {
       return false;
     }
 
-    // Doctor-specific validation
     if (!this.doctorData.specialization) {
       this.messageService.add({
         severity: 'error',

@@ -20,7 +20,6 @@ export class BedDashboardComponent implements OnInit {
   beds: any[] = [];
   currentAdmissions: any[] = [];
   
-  // Computed properties
   totalBeds: number = 0;
   availableBeds: number = 0;
   occupiedBeds: number = 0;
@@ -30,7 +29,7 @@ export class BedDashboardComponent implements OnInit {
   
   patients: any[] = [];
   doctors: any[] = [];
-  availableBedsOptions: any[] = []; // Renamed to avoid conflict
+  availableBedsOptions: any[] = [];
   
   newAdmission: any = {
     patientId: null,
@@ -82,7 +81,6 @@ export class BedDashboardComponent implements OnInit {
       });
   }
 
-  // Calculate bed counts
   calculateBedCounts() {
     this.totalBeds = this.beds.length;
     this.availableBeds = this.beds.filter(bed => bed.Status === 'Available').length;
@@ -106,7 +104,6 @@ export class BedDashboardComponent implements OnInit {
   }
 
   openAdmitDialog() {
-    // Reset form
     this.newAdmission = {
       patientId: null,
       doctorId: null,
@@ -116,12 +113,10 @@ export class BedDashboardComponent implements OnInit {
       notes: ''
     };
     
-    // Load required data for dropdowns
     this.loadPatients();
     this.loadDoctors();
     this.loadAvailableBedsOptions();
     
-    // If current user is a doctor, pre-select them
     if (this.currentUser && this.currentUser.role === 'Doctor' && this.currentUser.doctorId) {
       this.newAdmission.doctorId = this.currentUser.doctorId;
     }
@@ -179,7 +174,6 @@ export class BedDashboardComponent implements OnInit {
   }
 
   admitPatient() {
-    // Validate required fields
     if (!this.newAdmission.patientId || !this.newAdmission.doctorId || 
         !this.newAdmission.bedId || !this.newAdmission.admissionReason) {
       this.messageService.add({
@@ -190,7 +184,6 @@ export class BedDashboardComponent implements OnInit {
       return;
     }
     
-    // Send admission request
     this.bedService.admitPatient(this.newAdmission)
       .subscribe({
         next: (response) => {
@@ -201,7 +194,6 @@ export class BedDashboardComponent implements OnInit {
           });
           this.admitDialog = false;
           
-          // Reload data
           this.loadBeds();
           this.loadCurrentAdmissions();
         },
@@ -242,7 +234,6 @@ export class BedDashboardComponent implements OnInit {
           });
           this.dischargeDialog = false;
           
-          // Reload data
           this.loadBeds();
           this.loadCurrentAdmissions();
         },

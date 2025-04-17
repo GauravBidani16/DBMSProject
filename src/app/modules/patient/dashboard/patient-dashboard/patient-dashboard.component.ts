@@ -51,7 +51,6 @@ export class PatientDashboardComponent implements OnInit {
         next: (data) => {
           this.patientData = data;
           this.loadAppointments(patientId);
-          // this.loadPrescriptions(patientId);
         },
         error: (error) => {
           this.loading = false;
@@ -119,20 +118,6 @@ export class PatientDashboardComponent implements OnInit {
       });
   }
 
-  // loadPrescriptions(patientId: number) {
-  //   this.patientService.getPatientPrescriptions(patientId)
-  //     .subscribe({
-  //       next: (data) => {
-  //         this.recentPrescriptions = data
-  //           .sort((a: any, b: any) => new Date(b.PrescriptionDate).getTime() - new Date(a.PrescriptionDate).getTime())
-  //           .slice(0, 3);
-  //       },
-  //       error: (error) => {
-  //         console.error('Error loading prescriptions:', error);
-  //       }
-  //     });
-  // }
-
   getNextAppointment() {
     if (this.upcomingAppointments && this.upcomingAppointments.length > 0) {
       return this.upcomingAppointments[0];
@@ -152,8 +137,7 @@ export class PatientDashboardComponent implements OnInit {
         return 'info';
     }
   }
-  
-  
+ 
   formatDate(dateOfBirth: string) {
     const dob = new Date(dateOfBirth);
     return dob.getFullYear() + "-" + dob.getMonth() + "-" + dob.getDay();

@@ -164,20 +164,15 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   submitForm() {
-    // Validate form
     if (!this.validateForm()) {
       return;
     }
 
     this.loading = true;
 
-    // Calculate end time (30 minutes after start time)
     let endTime = this.calculateEndTime(this.appointment.startTime);
-
-    // Format date for API
     let formattedDate = this.formatDate(this.appointment.appointmentDate);
 
-    // Prepare data for API
     const appointmentData = {
       patientId: this.appointment.patientId,
       doctorId: this.appointment.doctorId,
@@ -198,7 +193,6 @@ export class AppointmentFormComponent implements OnInit {
             detail: 'The appointment has been successfully scheduled.'
           });
 
-          // Navigate back to appointment list after 2 seconds
           setTimeout(() => {
             this.router.navigate(['/appointment']);
           }, 2000);
@@ -215,8 +209,6 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   calculateEndTime(startTime: string): string {
-    // Simple function to add 30 minutes to the start time
-    // In a real app, this would be more sophisticated
     const [hours, minutes] = startTime.split(':').map(Number);
     let newHours = hours;
     let newMinutes = minutes + 30;

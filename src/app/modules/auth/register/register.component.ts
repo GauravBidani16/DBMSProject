@@ -56,20 +56,17 @@ export class RegisterComponent {
   ) {}
 
   register() {
-    // Validate form
     if (!this.validateForm()) {
       return;
     }
 
     this.loading = true;
 
-    // Format date for API
     const formattedData = {
       ...this.registrationData,
       dateOfBirth: this.formatDate(this.registrationData.dateOfBirth)
     };
 
-    // Call registration API
     this.authService.register(formattedData)
       .subscribe({
         next: (response) => {
@@ -80,7 +77,6 @@ export class RegisterComponent {
             detail: 'Your account has been created. You can now log in.'
           });
           
-          // Redirect to login page after 2 seconds
           setTimeout(() => {
             this.router.navigate(['/auth/login']);
           }, 2000);
@@ -97,7 +93,6 @@ export class RegisterComponent {
   }
 
   validateForm(): boolean {
-    // Required fields
     if (!this.registrationData.firstName || !this.registrationData.lastName) {
       this.messageService.add({
         severity: 'error',
@@ -116,7 +111,6 @@ export class RegisterComponent {
       return false;
     }
 
-    // Valid email
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailPattern.test(this.registrationData.email)) {
       this.messageService.add({
@@ -127,7 +121,6 @@ export class RegisterComponent {
       return false;
     }
 
-    // Password validation
     if (!this.registrationData.password) {
       this.messageService.add({
         severity: 'error',
@@ -155,7 +148,6 @@ export class RegisterComponent {
       return false;
     }
 
-    // Date of birth validation
     if (!this.registrationData.dateOfBirth) {
       this.messageService.add({
         severity: 'error',
@@ -165,7 +157,6 @@ export class RegisterComponent {
       return false;
     }
 
-    // Gender validation
     if (!this.registrationData.gender) {
       this.messageService.add({
         severity: 'error',

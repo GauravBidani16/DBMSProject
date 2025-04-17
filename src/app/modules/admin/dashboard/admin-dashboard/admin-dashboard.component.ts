@@ -28,7 +28,6 @@ export class AdminDashboardComponent implements OnInit {
   loadDashboardData() {
     this.loading = true;
 
-    // Load dashboard statistics
     this.adminService.getDashboardStats()
       .subscribe({
         next: (data) => {

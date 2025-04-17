@@ -84,7 +84,6 @@ export class PatientEditComponent implements OnInit {
     this.patientService.getPatientById(this.patientId)
       .subscribe({
         next: (data) => {
-          // Map the API data to our form model
           this.patient = {
             firstName: data.FirstName,
             lastName: data.LastName,
@@ -120,7 +119,6 @@ export class PatientEditComponent implements OnInit {
 
     this.loading = true;
 
-    // Prepare data for API
     const patientData = {
       firstName: this.patient.firstName,
       lastName: this.patient.lastName,
@@ -154,7 +152,6 @@ export class PatientEditComponent implements OnInit {
               detail: 'Patient created successfully'
             });
             
-            // Navigate to patient list after short delay
             setTimeout(() => {
               this.router.navigate(['/patient']);
             }, 2000);
@@ -169,7 +166,6 @@ export class PatientEditComponent implements OnInit {
           }
         });
     } else {
-      // Update existing patient
       this.patientService.updatePatient(this.patientId, patientData)
         .subscribe({
           next: (response) => {
@@ -180,7 +176,6 @@ export class PatientEditComponent implements OnInit {
               detail: 'Patient information updated successfully'
             });
             
-            // Navigate back to patient details after 2 seconds
             setTimeout(() => {
               this.router.navigate(['/patient', this.patientId]);
             }, 2000);
@@ -239,7 +234,7 @@ export class PatientEditComponent implements OnInit {
 
   formatDate(date: Date): string {
     if (!date) return '';
-    return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    return date.toISOString().split('T')[0];
   }
 
   cancel() {

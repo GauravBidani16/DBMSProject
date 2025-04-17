@@ -20,14 +20,14 @@ const billingRoutes = require('./routes/billing');
 const adminRoutes = require('./routes/admin');
 
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+// app.use('/api/users', userRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/pharmacy', pharmacyRoutes);
 app.use('/api/beds', bedRoutes);
 app.use('/api/vitals', vitalsRoutes);
-app.use('/api/billing', billingRoutes);
+// app.use('/api/billing', billingRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {

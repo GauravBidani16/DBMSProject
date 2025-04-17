@@ -38,7 +38,6 @@ export class LoginComponent {
         next: (response) => {
           this.loading = false;
           
-          // Navigate based on user role
           const role = this.authService.getUserRole();
           if (role === 'Admin') {
             this.router.navigate(['/admin']);

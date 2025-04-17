@@ -122,7 +122,6 @@ export class AppointmentListComponent implements OnInit {
     this.appointmentService.updateAppointmentStatus(appointment.AppointmentID, status)
       .subscribe({
         next: (response) => {
-          // Update the status in the local array
           appointment.Status = status;
           
           this.messageService.add({
@@ -143,17 +142,14 @@ export class AppointmentListComponent implements OnInit {
 
   applyFilters() {
     this.filteredAppointments = this.appointments.filter(appointment => {
-      // Filter by status if selected
       if (this.selectedStatus && appointment.Status !== this.selectedStatus) {
         return false;
       }
       
-      // Filter by type if selected
       if (this.selectedType && appointment.AppointmentType !== this.selectedType) {
         return false;
       }
       
-      // Filter by search text
       if (this.searchText) {
         const searchLower = this.searchText.toLowerCase();
         return appointment.PatientName.toLowerCase().includes(searchLower) ||

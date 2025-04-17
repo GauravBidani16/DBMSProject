@@ -85,14 +85,12 @@ export class InventoryAddComponent implements OnInit {
   }
 
   submitForm() {
-    // Validate the form
     if (!this.validateForm()) {
       return;
     }
 
     this.loading = true;
 
-    // Format dates
     const formattedData = {
       ...this.inventoryItem,
       purchaseDate: this.formatDate(this.inventoryItem.purchaseDate),
@@ -109,7 +107,6 @@ export class InventoryAddComponent implements OnInit {
             detail: 'Inventory added successfully'
           });
           
-          // Navigate back to pharmacy dashboard after a short delay
           setTimeout(() => {
             this.router.navigate(['/pharmacy']);
           }, 1500);

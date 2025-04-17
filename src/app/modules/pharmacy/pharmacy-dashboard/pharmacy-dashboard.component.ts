@@ -14,7 +14,6 @@ import { PrimeNgImports } from '../../../primengModules';
 export class PharmacyDashboardComponent implements OnInit {
   medicines: any[] = [];
   inventory: any[] = [];
-  prescriptions: any[] = [];
   
   loading = true;
   lowStockThreshold = 50;
@@ -27,7 +26,6 @@ export class PharmacyDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadMedicines();
     this.loadInventory();
-    this.loadPrescriptions();
   }
 
   loadMedicines() {
@@ -64,22 +62,6 @@ export class PharmacyDashboardComponent implements OnInit {
       });
   }
 
-  loadPrescriptions() {
-    this.pharmacyService.getPrescriptions()
-      .subscribe({
-        next: (data: any[]) => {
-          this.prescriptions = data;
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to load prescriptions'
-          });
-        }
-      });
-  }
-
   getInventoryStatus(quantity: number): string {
     if (quantity <= 0) {
       return 'Out of Stock';
@@ -100,21 +82,6 @@ export class PharmacyDashboardComponent implements OnInit {
     }
   }
 
-  getPrescriptionStatusColor(status: string): string {
-    switch (status) {
-      case 'Pending':
-        return 'bg-blue-100 text-blue-700 border-round px-2 py-1';
-      case 'Dispensed':
-        return 'bg-green-100 text-green-700 border-round px-2 py-1';
-      case 'Partially Dispensed':
-        return 'bg-yellow-100 text-yellow-700 border-round px-2 py-1';
-      case 'Cancelled':
-        return 'bg-red-100 text-red-700 border-round px-2 py-1';
-      default:
-        return '';
-    }
-  }
-
   getLowStockItems(): any[] {
     return this.inventory.filter(item => item.QuantityInStock < this.lowStockThreshold);
   }
@@ -128,9 +95,5 @@ export class PharmacyDashboardComponent implements OnInit {
       const expiryDate = new Date(item.ExpiryDate);
       return expiryDate <= threeMonthsLater && expiryDate >= today;
     });
-  }
-
-  getPendingPrescriptions(): any[] {
-    return this.prescriptions.filter(p => p.Status === 'Pending' || p.Status === 'Partially Dispensed');
   }
 }
