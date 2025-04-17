@@ -57,11 +57,7 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Doctor not found' });
     }
 
-    const scheduleQuery = `SELECT * FROM DoctorSchedule WHERE DoctorID = ?`;
-    const schedules = await executeQuery(scheduleQuery, [req.params.id]);
-
     const doctor = doctorRows[0];
-    doctor.schedules = schedules;
 
     res.json({ success: true, data: doctor });
   } catch (error) {

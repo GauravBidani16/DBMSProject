@@ -10,7 +10,7 @@
     <div class="col-12 md:col-4">
       <p-card header="Patient Information">
         <div>
-          <div class="field mb-4">
+          <div *ngIf="!selectedPatient" class="field mb-4">
             <label for="patient" class="block text-900 font-medium mb-2">Patient*</label>
             <p-select id="patient" [options]="patients" optionLabel="patientName" optionValue="PatientID" [(ngModel)]="vitalsData.patientId" 
                         placeholder="Select Patient" [filter]="true" [showClear]="true" styleClass="w-full"></p-select>

@@ -130,7 +130,7 @@ router.post('/admissions', async (req, res) => {
 
 // Discharge a patient
 router.post('/admissions/:id/discharge', async (req, res) => {
-  const { notes, dischargeRemarks, userId } = req.body;
+  const { notes,userId } = req.body;
   const admissionId = req.params.id;
 
   if (!userId) {
@@ -142,10 +142,10 @@ router.post('/admissions/:id/discharge', async (req, res) => {
 
   try {
     const dischargeQuery = `
-      UPDATE PatientAdmission SET DischargeDate = NOW(), Status = "Discharged", DischargeRemarks = ?
+      UPDATE PatientAdmission SET DischargeDate = NOW(), Status = "Discharged"
       WHERE AdmissionID = ? AND Status = "Admitted"
     `;
-    const updateResult = await executeQuery(dischargeQuery, [dischargeRemarks || '', admissionId]);
+    const updateResult = await executeQuery(dischargeQuery, [admissionId]);
 
     if (!updateResult.affectedRows) {
       await conn.rollback();

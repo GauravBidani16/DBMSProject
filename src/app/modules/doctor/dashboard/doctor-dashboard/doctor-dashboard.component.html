@@ -57,8 +57,6 @@
             <td>{{ appointment.AppointmentType }}</td>
             <td><p-tag [value]="appointment.Status" [severity]="getSeverity(appointment.Status)"></p-tag></td>
             <td>
-              <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text"
-                      [routerLink]="['/appointment', appointment.AppointmentID]"></button>
               <button *ngIf="appointment.Status === 'Scheduled'" pButton pRipple icon="pi pi-check" 
                       class="p-button-rounded p-button-success p-button-text"
                       [routerLink]="['/appointment', appointment.AppointmentID]"></button>

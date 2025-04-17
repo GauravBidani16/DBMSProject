@@ -52,38 +52,55 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update patient
+// Update Patient
 router.put('/:id', async (req, res) => {
-  const { address, bloodGroup, medicalHistory, allergies,
-          emergencyContactName, emergencyContactNumber, emergencyContactRelation } = req.body;
+  const {
+    firstName, lastName, phoneNumber, dateOfBirth, gender, bloodGroup, height, weight,
+    address, allergies, medicalHistory,
+    emergencyContactName, emergencyContactNumber, emergencyContactRelation
+  } = req.body;
 
   try {
-    const updateQuery = `
-      UPDATE Patient SET Address = ?, BloodGroup = ?, MedicalHistory = ?, Allergies = ?,
+    const patientQuery = 'SELECT UserID FROM Patient WHERE PatientID = ?';
+    const patients = await executeQuery(patientQuery, [req.params.id]);
+
+    if (!patients.length) {
+      return res.status(404).json({ success: false, message: 'Patient not found' });
+    }
+
+    const userId = patients[0].UserID;
+
+    const userUpdateQuery = `
+      UPDATE User SET FirstName = ?, LastName = ?, PhoneNumber = ? 
+      WHERE UserID = ?
+    `;
+    await executeQuery(userUpdateQuery, [firstName, lastName, phoneNumber, userId]);
+
+    const patientUpdateQuery = `
+      UPDATE Patient SET DateOfBirth = ?, Gender = ?, BloodGroup = ?, Height = ?, Weight = ?, 
+                         Address = ?, Allergies = ?, MedicalHistory = ?, 
                          EmergencyContactName = ?, EmergencyContactNumber = ?, EmergencyContactRelation = ?
       WHERE PatientID = ?
     `;
-    const result = await executeQuery(updateQuery, [
-      address, bloodGroup, medicalHistory, allergies,
+    await executeQuery(patientUpdateQuery, [
+      dateOfBirth, gender, bloodGroup, height, weight,
+      address, allergies, medicalHistory,
       emergencyContactName, emergencyContactNumber, emergencyContactRelation,
       req.params.id
     ]);
 
-    if (!result.affectedRows) {
-      return res.status(404).json({ success: false, message: 'Patient not found' });
-    }
-
     res.json({ success: true, message: 'Patient updated successfully' });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Error updating patient:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
 // Register a new patient using stored procedure
 router.post('/', async (req, res) => {
   const { firstName, lastName, email, password, phoneNumber, dateOfBirth, gender,
-          bloodGroup, height, weight, address, allergies, medicalHistory,
-          emergencyContactName, emergencyContactNumber, emergencyContactRelation } = req.body;
+    bloodGroup, height, weight, address, allergies, medicalHistory,
+    emergencyContactName, emergencyContactNumber, emergencyContactRelation } = req.body;
 
   if (!firstName || !lastName || !email || !password || !dateOfBirth || !gender) {
     return res.status(400).json({ success: false, message: 'Required fields are missing' });

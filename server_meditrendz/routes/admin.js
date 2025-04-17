@@ -14,8 +14,7 @@ const getMonthlyStats = async () => {
       DATE_FORMAT(a.AppointmentDate, '%M %Y') as month,
       COUNT(DISTINCT a.AppointmentID) as appointments,
       COUNT(DISTINCT pa.AdmissionID) as admissions,
-      COUNT(DISTINCT CASE WHEN pa.Status = 'Discharged' THEN pa.AdmissionID END) as discharged,
-      SUM(IFNULL(b.TotalAmount, 0)) as revenue
+      COUNT(DISTINCT CASE WHEN pa.Status = 'Discharged' THEN pa.AdmissionID END) as discharged
     FROM 
       (SELECT DISTINCT DATE_FORMAT(AppointmentDate, '%Y-%m-01') as date 
        FROM Appointment 
@@ -23,7 +22,6 @@ const getMonthlyStats = async () => {
       ) as dates
     LEFT JOIN Appointment a ON DATE_FORMAT(a.AppointmentDate, '%Y-%m') = DATE_FORMAT(dates.date, '%Y-%m')
     LEFT JOIN PatientAdmission pa ON DATE_FORMAT(pa.AdmissionDate, '%Y-%m') = DATE_FORMAT(dates.date, '%Y-%m')
-    LEFT JOIN Bill b ON DATE_FORMAT(b.BillDate, '%Y-%m') = DATE_FORMAT(dates.date, '%Y-%m')
     GROUP BY month_year, month
     ORDER BY month_year DESC
     LIMIT 6
@@ -34,7 +32,7 @@ const getMonthlyStats = async () => {
     appointments: stat.appointments || 0,
     admissions: stat.admissions || 0,
     discharged: stat.discharged || 0,
-    revenue: parseFloat(stat.revenue || 0)
+    revenue: 0
   }));
 };
 

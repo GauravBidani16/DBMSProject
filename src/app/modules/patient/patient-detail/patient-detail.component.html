@@ -95,7 +95,6 @@
               <th>Time</th>
               <th>Type</th>
               <th>Status</th>
-              <th>Actions</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-appointment>
@@ -106,9 +105,6 @@
               <td>{{ appointment.AppointmentType }}</td>
               <td>
                 <p-tag [value]="appointment.Status" [severity]="getSeverity(appointment.Status)"></p-tag>
-              </td>
-              <td>
-                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text" [routerLink]="['/appointment', appointment.AppointmentID]"></button>
               </td>
             </tr>
           </ng-template>
